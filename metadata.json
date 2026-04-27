@@ -1,0 +1,8 @@
+{
+  "name": "xuehanyubutainan",
+  "description": "Ứng dụng học tiếng Trung theo chủ đề với AI hỗ trợ luyện nói và sửa lỗi phát âm.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
