@@ -30,7 +30,7 @@ export function FlashcardsView({ vocabList, playAudio }: { vocabList: Vocabulary
       </div>
       
       <div 
-        className="w-full aspect-[4/3] sm:aspect-video relative cursor-pointer perspective-1000 mb-8"
+        className="w-[90%] sm:w-full h-[320px] sm:h-[400px] relative cursor-pointer perspective-1000 mb-6 sm:mb-8 max-w-lg mx-auto"
         onClick={() => setIsFlipped(!isFlipped)}
         style={{ perspective: '1000px' }}
       >
@@ -41,55 +41,55 @@ export function FlashcardsView({ vocabList, playAudio }: { vocabList: Vocabulary
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* Front */}
-          <div className="absolute inset-0 bg-white rounded-[40px] shadow-sm border-2 border-orange-100 flex flex-col items-center justify-center p-8 text-center"
+          <div className="absolute inset-0 bg-white rounded-3xl sm:rounded-[40px] shadow-xl shadow-orange-100/50 border-2 border-orange-50 flex flex-col items-center justify-center p-6 text-center"
                style={{ backfaceVisibility: 'hidden' }}>
-            <StrokeWriter character={currentWord.character} size={120} className="mb-4" />
+            <StrokeWriter character={currentWord.character} size={80} className="mb-4 sm:mb-6 sm:!w-[100px] sm:!h-[100px] !w-[80px] !h-[80px]" />
             <button 
               onClick={(e) => { e.stopPropagation(); playAudio(currentWord.character); }}
-              className="p-3 bg-gray-50 rounded-full text-gray-400 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+              className="p-3 bg-orange-50 rounded-full text-orange-500 hover:text-white hover:bg-orange-500 transition-colors shadow-sm"
             >
-              <Volume2 size={24} />
+              <Volume2 size={20} className="sm:w-6 sm:h-6" />
             </button>
-            <div className="mt-8 text-sm text-gray-400">Chạm để lật mặt thẻ</div>
+            <div className="mt-6 text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-widest absolute bottom-6">Chạm để lật mặt thẻ</div>
           </div>
           
           {/* Back */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100 rounded-[40px] shadow-inner border-2 border-orange-200 flex flex-col items-center justify-center p-8 text-center"
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl sm:rounded-[40px] shadow-xl shadow-orange-200/50 border-2 border-orange-200 flex flex-col items-center justify-center p-6 text-center"
                style={{ backfaceVisibility: 'hidden', transform: 'rotateX(180deg)' }}>
-            <div className="text-3xl sm:text-4xl font-mono text-orange-600 mb-2">{currentWord.pinyin}</div>
-            <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">{currentWord.meaning}</div>
+            <div className="text-xl sm:text-2xl font-mono text-orange-600 mb-2">{currentWord.pinyin}</div>
+            <div className="text-lg sm:text-xl font-bold text-gray-800 mb-4">{currentWord.meaning}</div>
             
             {currentWord.example && (
-              <div className="mt-2 flex flex-col items-center gap-1.5 max-w-sm">
-                 <div className="text-lg sm:text-xl font-medium text-gray-700">{currentWord.example}</div>
-                 {currentWord.examplePinyin && <div className="text-sm sm:text-base text-orange-600/80 font-mono">{currentWord.examplePinyin}</div>}
-                 {currentWord.exampleTranslation && <div className="text-sm sm:text-base text-gray-500">"{currentWord.exampleTranslation}"</div>}
+              <div className="mt-2 flex flex-col items-center gap-1 max-w-[260px] sm:max-w-sm">
+                 <div className="text-sm sm:text-base font-medium text-gray-700">{currentWord.example}</div>
+                 {currentWord.examplePinyin && <div className="text-[10px] sm:text-xs text-orange-600/80 font-mono">{currentWord.examplePinyin}</div>}
+                 {currentWord.exampleTranslation && <div className="text-[10px] sm:text-xs text-gray-500">"{currentWord.exampleTranslation}"</div>}
               </div>
             )}
             
-            <div className="mt-6 text-sm text-gray-400 absolute bottom-6">Chạm để lật mặt thẻ</div>
+            <div className="text-[10px] sm:text-xs text-orange-400/80 font-medium uppercase tracking-widest absolute bottom-6">Chạm để lật mặt thẻ</div>
           </div>
         </motion.div>
       </div>
       
-      <div className="flex items-center gap-6 mt-4">
+      <div className="flex items-center gap-4 sm:gap-6 mt-2 sm:mt-4">
         <button 
           onClick={prevCard}
-          className="p-4 bg-white rounded-full shadow-sm text-gray-400 hover:text-orange-600 hover:bg-orange-50 transition-all border border-gray-100"
+          className="p-3 sm:p-4 bg-white rounded-full shadow-sm text-gray-400 hover:text-orange-600 hover:bg-orange-50 transition-all border border-gray-100"
         >
-          <ChevronLeft size={32} />
+          <ChevronLeft size={24} className="sm:w-8 sm:h-8" />
         </button>
         <button 
           onClick={() => { setIsFlipped(false); setCurrentIndex(0); }}
-          className="p-3 text-gray-300 hover:text-orange-500 transition-colors"
+          className="p-2 sm:p-3 text-gray-300 hover:text-orange-500 transition-colors"
         >
-          <RotateCcw size={24} />
+          <RotateCcw size={20} className="sm:w-6 sm:h-6" />
         </button>
         <button 
            onClick={nextCard}
-          className="p-4 bg-orange-500 rounded-full shadow-lg shadow-orange-200 text-white hover:bg-orange-600 hover:scale-105 transition-all"
+          className="p-3 sm:p-4 bg-orange-500 rounded-full shadow-lg shadow-orange-200 text-white hover:bg-orange-600 hover:scale-105 transition-all"
         >
-          <ChevronRight size={32} />
+          <ChevronRight size={24} className="sm:w-8 sm:h-8" />
         </button>
       </div>
     </div>

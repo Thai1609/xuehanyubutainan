@@ -140,7 +140,7 @@ export default function TopicDetail({
       )}
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-        <ScrollableTabContainer className="mb-0" containerClassName="flex p-2 bg-white rounded-3xl border border-orange-50 gap-2 w-fit shadow-sm">
+        <ScrollableTabContainer className="mb-0 w-full" containerClassName="flex p-1.5 sm:p-2 bg-white rounded-[20px] sm:rounded-3xl border border-orange-50 gap-1.5 sm:gap-2 w-full md:w-fit shadow-sm overflow-x-auto">
           {[
             { id: 'dialogue', label: 'Hội thoại', icon: MessageSquare, color: 'bg-blue-600', show: !!activeDialogue },
             { id: 'radicals', label: 'Bộ thủ', icon: Type, color: 'bg-green-500', show: topic.radicals.length > 0 },
@@ -153,13 +153,13 @@ export default function TopicDetail({
                 setActiveTab(tab.id as any);
               }}
               className={cn(
-                "px-4 md:px-6 py-3 text-sm font-bold rounded-2xl flex items-center gap-3 transition-all whitespace-nowrap",
+                "px-3 md:px-6 py-2.5 md:py-3 text-xs md:text-sm font-bold rounded-xl md:rounded-2xl flex items-center gap-1.5 md:gap-3 transition-all whitespace-nowrap flex-grow justify-center md:flex-none",
                 activeTab === tab.id 
                   ? `${tab.color} text-white shadow-lg` 
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
               )}
             >
-              <tab.icon size={18} />
+              <tab.icon size={16} className="md:w-[18px] md:h-[18px]" />
               <span>{tab.label}</span>
             </button>
           ))}
@@ -416,7 +416,7 @@ export default function TopicDetail({
                   </div>
                 ) : (
                   /* Flashcard UI */
-                  <div className="max-w-xl mx-auto py-10">
+                  <div className="max-w-xl mx-auto py-4 sm:py-8 px-4 sm:px-0">
                     <AnimatePresence mode="wait">
                       <motion.div 
                         key={flashcardIndex}
@@ -424,37 +424,37 @@ export default function TopicDetail({
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 1.1, opacity: 0 }}
                         onClick={() => setShowMeaning(!showMeaning)}
-                        className="aspect-[4/3] bg-white rounded-[60px] shadow-2xl border-b-[12px] border-orange-100 flex flex-col items-center justify-center p-12 cursor-pointer relative overflow-hidden group select-none"
+                        className="min-h-[300px] sm:min-h-[380px] w-full bg-white rounded-3xl sm:rounded-[50px] shadow-2xl border-b-[6px] sm:border-b-[10px] border-orange-100 flex flex-col items-center justify-center p-6 sm:p-10 pb-12 sm:pb-16 cursor-pointer relative overflow-hidden group select-none"
                       >
-                        <div className="absolute top-8 right-8 text-gray-300 group-hover:text-orange-300 transition-colors">
-                          <RefreshCcw size={24} />
+                        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 text-gray-300 group-hover:text-orange-300 transition-colors">
+                          <RefreshCcw size={18} className="sm:w-5 sm:h-5" />
                         </div>
 
                         {!showMeaning ? (
-                          <div className="text-center">
-                            <div className="text-8xl font-black text-gray-900 mb-6 tracking-tighter">
+                          <div className="text-center mt-4">
+                            <div className="text-5xl sm:text-7xl font-black text-gray-900 mb-4 sm:mb-6 tracking-tighter">
                               {filteredVocab[flashcardIndex]?.character}
                             </div>
-                            <div className="text-2xl font-mono text-orange-400 bg-orange-50 px-6 py-2 rounded-full inline-block">
+                            <div className="text-lg sm:text-xl font-mono text-orange-400 bg-orange-50 px-4 py-1.5 rounded-full inline-block">
                               {filteredVocab[flashcardIndex]?.pinyin}
                             </div>
-                            <p className="mt-8 text-gray-400 text-sm font-bold uppercase tracking-widest">Nhấn để xem ý nghĩa</p>
+                            <p className="mt-6 sm:mt-8 text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-center">Nhấn để xem ý nghĩa</p>
                           </div>
                         ) : (
                           <motion.div 
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center"
+                            className="text-center w-full mt-4"
                           >
-                            <div className="text-3xl font-bold text-gray-800 mb-6">
+                            <div className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">
                               {filteredVocab[flashcardIndex]?.meaning}
                             </div>
                             
                             {filteredVocab[flashcardIndex]?.example && (
-                              <div className="mt-2 flex flex-col items-center gap-1.5 max-w-sm mx-auto mb-6">
-                                 <div className="text-lg font-medium text-gray-700">{filteredVocab[flashcardIndex].example}</div>
-                                 {filteredVocab[flashcardIndex].examplePinyin && <div className="text-sm text-orange-600/80 font-mono">{filteredVocab[flashcardIndex].examplePinyin}</div>}
-                                 {filteredVocab[flashcardIndex].exampleTranslation && <div className="text-sm text-gray-500">"{filteredVocab[flashcardIndex].exampleTranslation}"</div>}
+                              <div className="mt-2 flex flex-col items-center gap-1 max-w-[280px] sm:max-w-sm mx-auto mb-4">
+                                 <div className="text-sm sm:text-base font-medium text-gray-700">{filteredVocab[flashcardIndex].example}</div>
+                                 {filteredVocab[flashcardIndex].examplePinyin && <div className="text-[10px] sm:text-xs text-orange-600/80 font-mono">{filteredVocab[flashcardIndex].examplePinyin}</div>}
+                                 {filteredVocab[flashcardIndex].exampleTranslation && <div className="text-[10px] sm:text-xs text-gray-500">"{filteredVocab[flashcardIndex].exampleTranslation}"</div>}
                               </div>
                             )}
                             
@@ -463,20 +463,20 @@ export default function TopicDetail({
                                 e.stopPropagation();
                                 playAudio(filteredVocab[flashcardIndex]?.character);
                               }}
-                              className="w-16 h-16 bg-orange-500 text-white rounded-3xl flex items-center justify-center shadow-lg shadow-orange-200 hover:scale-110 active:scale-95 transition-all mx-auto"
+                              className="w-12 h-12 sm:w-14 sm:h-14 bg-orange-500 text-white rounded-[16px] sm:rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200 hover:scale-110 active:scale-95 transition-all mx-auto mt-2"
                             >
-                              <Volume2 size={32} />
+                              <Volume2 size={20} className="sm:w-6 sm:h-6" />
                             </button>
                           </motion.div>
                         )}
 
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center flex-wrap gap-1.5 w-[85%] px-4">
                            {filteredVocab.map((_, i) => (
                              <div 
                                key={i} 
                                className={cn(
-                                 "w-2 h-2 rounded-full transition-all",
-                                 i === flashcardIndex ? "bg-orange-500 w-6" : "bg-orange-100"
+                                 "w-1.5 h-1.5 rounded-full transition-all",
+                                 i === flashcardIndex ? "bg-orange-500 w-4" : "bg-orange-100"
                                )} 
                              />
                            ))}
@@ -484,13 +484,13 @@ export default function TopicDetail({
                       </motion.div>
                     </AnimatePresence>
 
-                    <div className="flex items-center justify-between mt-12 gap-6">
+                    <div className="flex items-center justify-between mt-6 sm:mt-10 gap-4 sm:gap-6">
                       <button 
                         onClick={() => {
                           setFlashcardIndex((prev) => (prev > 0 ? prev - 1 : filteredVocab.length - 1));
                           setShowMeaning(false);
                         }}
-                        className="flex-1 py-4 bg-white rounded-2xl border border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-all shadow-sm"
+                        className="flex-1 py-3 bg-white rounded-xl border border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-all shadow-sm text-sm sm:text-base"
                       >
                         Trở lại
                       </button>
@@ -499,7 +499,7 @@ export default function TopicDetail({
                           setFlashcardIndex((prev) => (prev < filteredVocab.length - 1 ? prev + 1 : 0));
                           setShowMeaning(false);
                         }}
-                        className="flex-1 py-4 bg-orange-600 text-white rounded-2xl font-bold hover:bg-orange-700 transition-all shadow-lg shadow-orange-100"
+                        className="flex-1 py-3 bg-orange-600 text-white rounded-xl font-bold hover:bg-orange-700 transition-all shadow-lg shadow-orange-100 text-sm sm:text-base"
                       >
                         Tiếp theo
                       </button>

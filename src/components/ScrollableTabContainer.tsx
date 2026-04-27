@@ -47,7 +47,7 @@ export function ScrollableTabContainer({
       {canScrollLeft && (
         <button 
           onClick={scrollLeft}
-          className="absolute left-0 z-10 p-1.5 -ml-2 sm:-ml-4 bg-white border border-gray-100 rounded-full shadow-md text-gray-500 hover:text-orange-500 flex items-center justify-center transform hover:scale-110 transition-all"
+          className="hidden md:flex absolute left-0 z-10 p-1.5 -ml-2 sm:-ml-4 bg-white border border-gray-100 rounded-full shadow-md text-gray-500 hover:text-orange-500 items-center justify-center transform hover:scale-110 transition-all"
         >
           <ChevronLeft size={16} />
         </button>
@@ -62,7 +62,7 @@ export function ScrollableTabContainer({
       {canScrollRight && (
         <button 
           onClick={scrollRight}
-          className="absolute right-0 z-10 p-1.5 -mr-2 sm:-mr-4 bg-white border border-gray-100 rounded-full shadow-md text-gray-500 hover:text-orange-500 flex items-center justify-center transform hover:scale-110 transition-all"
+          className="hidden md:flex absolute right-0 z-10 p-1.5 -mr-2 sm:-mr-4 bg-white border border-gray-100 rounded-full shadow-md text-gray-500 hover:text-orange-500 items-center justify-center transform hover:scale-110 transition-all"
         >
           <ChevronRight size={16} />
         </button>

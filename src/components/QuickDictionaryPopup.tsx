@@ -42,22 +42,22 @@ export const QuickDictionaryPopup: React.FC = () => {
       {/* Floating Toggle Button - Adjusted position to be lower as requested */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed z-[70] top-40 right-6 w-14 h-14 bg-orange-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-orange-700 transition-all hover:scale-110 active:scale-95 group border-2 border-white/20"
+        className="fixed z-[70] top-28 sm:top-40 right-4 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-orange-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-orange-700 transition-all hover:scale-110 active:scale-95 group border-2 border-white/20"
         title="Tra từ nhanh"
       >
-        {isOpen ? <X size={24} /> : <Search size={24} className="group-hover:rotate-12 transition-transform" />}
+        {isOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Search size={20} className="sm:w-6 sm:h-6 group-hover:rotate-12 transition-transform" />}
       </button>
 
       {/* Popup Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-[65] flex items-start justify-end pr-20 pt-40 pointer-events-none">
+          <div className="fixed inset-0 z-[65] flex items-start justify-center sm:justify-end sm:pr-20 pt-28 sm:pt-40 pointer-events-none px-4">
             <motion.div
               ref={popupRef}
-              initial={{ opacity: 0, x: 20, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 20, scale: 0.95 }}
-              className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-orange-100 overflow-hidden pointer-events-auto mr-4"
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              className="w-full max-w-sm bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-orange-100 overflow-hidden pointer-events-auto sm:mr-4 mt-14 sm:mt-0"
             >
               <div className="p-4 border-b border-orange-50 bg-orange-50/30">
                 <div className="relative">

@@ -137,42 +137,42 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-4">
-      <div className="mb-20 text-center max-w-3xl mx-auto">
-        <div className="inline-block px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-6 tracking-widest uppercase shadow-sm">Bắt đầu hành trình</div>
-        <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-8 tracking-tighter leading-[0.95]">
+    <div className="max-w-7xl mx-auto py-8 sm:py-16 px-4">
+      <div className="mb-12 sm:mb-20 text-center max-w-3xl mx-auto">
+        <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-100 text-orange-700 rounded-full text-[10px] sm:text-xs font-bold mb-4 sm:mb-6 tracking-widest uppercase shadow-sm">Bắt đầu hành trình</div>
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4 sm:mb-8 tracking-tighter leading-[1.1] sm:leading-[0.95]">
           Làm chủ tiếng Trung <br />
           <span className="text-orange-500">Dễ như ăn bánh.</span>
         </h2>
-        <p className="text-gray-500 text-lg leading-relaxed mb-12">
+        <p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 px-2">
           Học từ phát âm cơ bản, bộ thủ cốt lõi đến cấu trúc thực tế. 
           Luyện tập phản xạ cùng AI mỗi ngày.
         </p>
       </div>
 
       <div className="w-full max-w-full overflow-hidden flex justify-center mb-12">
-        <ScrollableTabContainer className="mb-0" containerClassName="flex bg-gray-100 p-2 rounded-full mx-auto w-fit">
+        <ScrollableTabContainer className="mb-0" containerClassName="flex bg-gray-100 p-1.5 sm:p-2 rounded-full mx-auto w-fit">
           <button 
             onClick={() => setMainTab('vocab')}
-            className={cn("px-4 md:px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'vocab' ? "bg-white text-orange-500 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'vocab' ? "bg-white text-orange-500 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
             Từ vựng theo chủ đề
           </button>
           <button 
             onClick={() => setMainTab('roadmap')}
-            className={cn("px-4 md:px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'roadmap' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'roadmap' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
             Lộ trình bài học
           </button>
           <button 
             onClick={() => setMainTab('radicals')}
-            className={cn("px-4 md:px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'radicals' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'radicals' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
             Thư viện Bộ Thủ
           </button>
           <button 
             onClick={() => setMainTab('practice')}
-            className={cn("px-4 md:px-6 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'practice' ? "bg-white text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'practice' ? "bg-white text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
             Luyện tập
           </button>
@@ -181,19 +181,19 @@ export default function Dashboard() {
 
       {mainTab === 'vocab' && (
       <section className="mb-24">
-        <div className="flex items-center justify-between gap-4 mb-12">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg">
-              <Languages size={24} />
+        <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg">
+              <Languages size={20} className="sm:w-6 sm:h-6" />
             </div>
             <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Danh mục từ mới</h2>
-              <p className="text-gray-500">Học từ mới qua các chủ đề giao tiếp thực tế</p>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Danh mục từ mới</h2>
+              <p className="text-gray-500 text-sm sm:text-base">Học từ mới qua các chủ đề giao tiếp thực tế</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
           {CHINESE_DATA.map((topic) => (
             <TopicCard 
               key={topic.id} 
@@ -208,19 +208,19 @@ export default function Dashboard() {
       {/* 3. Learning Roadmap Section */}
       {mainTab === 'roadmap' && (
         <section className="mb-24">
-          <div className="flex items-center justify-between gap-4 mb-12">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-2xl">
-                <Map size={24} />
+          <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xl sm:text-2xl">
+                <Map size={20} className="sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">Lộ trình học</h2>
-                <p className="text-gray-500">Chinh phục 301 mẫu câu đàm thoại tiếng Hoa tinh hoa</p>
+                <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Lộ trình học</h2>
+                <p className="text-gray-500 text-sm sm:text-base">Chinh phục 301 mẫu câu đàm thoại tiếng Hoa tinh hoa</p>
               </div>
             </div>
           </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {[
           { title: '301 Đàm thoại', level: 'Mới bắt đầu', color: 'bg-blue-500', shadow: 'shadow-blue-50', desc: 'Gom nhóm 10 bài đầu tiên với đầy đủ hội thoại và từ vựng.', vocab: 300, topicId: '301-full' },
          ].map((item, i) => (
@@ -258,21 +258,21 @@ export default function Dashboard() {
 
       {mainTab === 'radicals' && (
         <section className="mb-24">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="w-12 h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg text-2xl">
-              <Grid size={24} />
+          <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg text-xl sm:text-2xl">
+              <Grid size={20} className="sm:w-6 sm:h-6" />
             </div>
             <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Thư viện Bộ Thủ</h2>
-              <p className="text-gray-500">Gốc rễ của chữ Hán, chia theo nhóm ý nghĩa sinh động</p>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Thư viện Bộ Thủ</h2>
+              <p className="text-gray-500 text-sm sm:text-base">Gốc rễ của chữ Hán, chia theo nhóm ý nghĩa sinh động</p>
             </div>
           </div>
           
-          <div className="space-y-12">
+          <div className="space-y-8 sm:space-y-12">
             {RADICAL_CATEGORIES.map((cat) => {
               const Icon = icons[cat.icon] || Grid;
               return (
-                <div key={cat.id} className="bg-white p-10 rounded-[48px] border border-gray-100 shadow-sm">
+                <div key={cat.id} className="bg-white p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-gray-100 shadow-sm">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="p-3 bg-gray-50 text-gray-600 rounded-2xl">
                       <Icon size={24} />
@@ -302,40 +302,40 @@ export default function Dashboard() {
       )}
 
       {mainTab === 'practice' && (
-        <section className="mb-24 flex flex-col items-center justify-center py-12">
+        <section className="mb-24 flex flex-col items-center justify-center py-8 sm:py-12">
           {!practiceMode ? (
             <>
-              <div className="w-20 h-20 bg-purple-100 text-purple-600 rounded-[32px] flex items-center justify-center mb-8 shadow-inner">
-                 <Gamepad2 size={40} />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-purple-100 text-purple-600 rounded-3xl sm:rounded-[32px] flex items-center justify-center mb-6 sm:mb-8 shadow-inner">
+                 <Gamepad2 size={32} className="sm:w-10 sm:h-10" />
               </div>
-              <h2 className="text-4xl font-black text-gray-900 mb-4 text-center">Đấu trường Luyện tập</h2>
-              <p className="text-gray-500 text-center max-w-lg mb-12">
+              <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center px-4">Đấu trường Luyện tập</h2>
+              <p className="text-gray-500 text-center max-w-lg mb-8 sm:mb-12 px-4 text-sm sm:text-base">
                 Ôn luyện toàn bộ từ vựng đã học qua hệ thống Flashcard kết hợp thuật toán lặp lại ngắt quãng (Spaced Repetition) và các bài Trắc nghiệm ngẫu nhiên.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl px-4 sm:px-0">
                  <div 
                    onClick={() => setPracticeMode('flashcards')}
-                   className="bg-gradient-to-br from-pink-50 to-rose-50 p-10 rounded-[48px] border border-pink-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
-                     <div className="absolute top-8 right-8 text-pink-200 group-hover:scale-150 transition-transform">
-                       <Layers size={80} />
+                   className="bg-gradient-to-br from-pink-50 to-rose-50 p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-pink-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
+                     <div className="absolute top-6 right-6 sm:top-8 sm:right-8 text-pink-200 group-hover:scale-150 transition-transform">
+                       <Layers size={60} className="sm:w-20 sm:h-20" />
                      </div>
-                     <h3 className="text-2xl font-bold text-pink-900 mb-2 relative z-10">Thẻ ghi nhớ tổng hợp</h3>
-                     <p className="text-pink-700 opacity-80 mb-8 relative z-10">Lượt qua ngẫu nhiên các từ vựng từ mọi chủ đề.</p>
-                     <div className="inline-flex bg-white text-pink-600 px-6 py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-pink-600 group-hover:text-white transition-colors">
+                     <h3 className="text-xl sm:text-2xl font-bold text-pink-900 mb-2 relative z-10 w-[70%] sm:w-auto">Thẻ ghi nhớ tổng hợp</h3>
+                     <p className="text-pink-700 opacity-80 mb-6 sm:mb-8 relative z-10 text-sm sm:text-base w-[80%] sm:w-auto">Lượt qua ngẫu nhiên các từ vựng từ mọi chủ đề.</p>
+                     <div className="inline-flex bg-white text-pink-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-pink-600 group-hover:text-white transition-colors text-sm sm:text-base">
                          Luyện Flashcard ngay
                      </div>
                  </div>
 
                  <div 
                    onClick={() => setPracticeMode('quiz')}
-                   className="bg-gradient-to-br from-indigo-50 to-blue-50 p-10 rounded-[48px] border border-indigo-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
-                     <div className="absolute top-8 right-8 text-indigo-200 group-hover:scale-150 transition-transform">
-                       <BrainCircuit size={80} />
+                   className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-indigo-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
+                     <div className="absolute top-6 right-6 sm:top-8 sm:right-8 text-indigo-200 group-hover:scale-150 transition-transform">
+                       <BrainCircuit size={60} className="sm:w-20 sm:h-20" />
                      </div>
-                     <h3 className="text-2xl font-bold text-indigo-900 mb-2 relative z-10">Thi trắc nghiệm ngẫu nhiên</h3>
-                     <p className="text-indigo-700 opacity-80 mb-8 relative z-10">Kiểm tra nhanh trí nhớ của bạn với 10 câu hỏi ngẫu nhiên từ toàn bộ kho từ vựng.</p>
-                     <div className="inline-flex bg-white text-indigo-600 px-6 py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                     <h3 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-2 relative z-10 w-[70%] sm:w-auto">Thi trắc nghiệm ngẫu nhiên</h3>
+                     <p className="text-indigo-700 opacity-80 mb-6 sm:mb-8 relative z-10 text-sm sm:text-base w-[80%] sm:w-auto">Kiểm tra nhanh trí nhớ của bạn với 10 câu hỏi ngẫu nhiên từ toàn bộ kho từ vựng.</p>
+                     <div className="inline-flex bg-white text-indigo-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-indigo-600 group-hover:text-white transition-colors text-sm sm:text-base">
                          Bắt đầu thi
                      </div>
                  </div>

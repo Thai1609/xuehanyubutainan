@@ -71,9 +71,9 @@ export default function AIAssistant() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] min-h-[500px] border border-orange-100 rounded-[40px] bg-white shadow-2xl overflow-hidden relative">
+    <div className="flex flex-col h-full min-h-[500px] border border-orange-100 rounded-3xl sm:rounded-[40px] bg-white shadow-2xl relative overflow-hidden flex-grow">
       {/* Header */}
-      <div className="p-8 border-b border-gray-50 bg-white flex items-center justify-between">
+      <div className="p-4 sm:p-8 border-b border-gray-50 bg-white flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-3xl shadow-sm border-2 border-white">
             🤖
@@ -106,58 +106,76 @@ export default function AIAssistant() {
       {/* Messages */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-8 space-y-6 bg-[#FAFAFA]/50 scroll-smooth"
+        className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 bg-[#FAFAFA]/50 scroll-smooth"
       >
-        {messages.map((m, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className={cn(
-              "flex w-full items-start gap-4",
-              m.role === 'user' ? "flex-row-reverse" : "flex-row"
-            )}
-          >
-            <div className={cn(
-              "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 mt-1 shadow-sm font-bold text-lg",
-              m.role === 'user' ? "bg-orange-100 text-orange-600" : "bg-green-100 text-green-600"
-            )}>
-              {m.role === 'user' ? 'Me' : '汉'}
-            </div>
-            <div className={cn(
-              "max-w-[75%] rounded-[28px] px-6 py-4 text-sm shadow-sm leading-relaxed relative group",
-              m.role === 'user' 
-                ? "bg-orange-500 text-white rounded-tr-none shadow-orange-100" 
-                : "bg-white border border-gray-100 text-gray-700 rounded-tl-none"
-            )}>
-              <div className="prose prose-sm prose-slate max-w-none dark:prose-invert prose-headings:text-inherit">
-                <ReactMarkdown>{m.text}</ReactMarkdown>
-              </div>
-              
-              {m.role === 'model' && (
-                <button 
-                  onClick={() => playAudio(m.text, i)}
-                  className={cn(
-                    "absolute -right-12 top-2 p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100",
-                    isPlaying === i ? "bg-green-500 text-white opacity-100 animate-pulse" : "bg-white border border-gray-100 text-gray-400 hover:text-green-500 hover:border-green-200"
-                  )}
-                >
-                  <Volume2 size={16} />
-                </button>
+        <AnimatePresence initial={false}>
+          {messages.map((m, i) => (
+            <motion.div
+              layout
+              key={i}
+              initial={{ opacity: 0, y: 15, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className={cn(
+                "flex w-full items-start gap-2 sm:gap-4",
+                m.role === 'user' ? "flex-row-reverse" : "flex-row"
               )}
-            </div>
-          </motion.div>
-        ))}
-        {isLoading && (
-          <div className="flex items-center gap-3 text-gray-400 pl-4">
-            <Loader2 className="animate-spin" size={18} />
-            <span className="text-xs font-bold uppercase tracking-widest">Xiao Ai đang soạn...</span>
-          </div>
-        )}
+            >
+              <div className={cn(
+                "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 mt-1 shadow-sm font-bold text-sm sm:text-lg",
+                m.role === 'user' ? "bg-orange-100 text-orange-600" : "bg-green-100 text-green-600"
+              )}>
+                {m.role === 'user' ? 'Me' : '汉'}
+              </div>
+              <div className={cn(
+                "max-w-[85%] sm:max-w-[75%] rounded-[22px] sm:rounded-[28px] px-4 sm:px-6 py-3 sm:py-4 text-sm shadow-sm leading-relaxed relative group",
+                m.role === 'user' 
+                  ? "bg-orange-500 text-white rounded-tr-sm sm:rounded-tr-none shadow-orange-100" 
+                  : "bg-white border border-gray-100 text-gray-700 rounded-tl-sm sm:rounded-tl-none"
+              )}>
+                <div className="prose prose-sm prose-slate max-w-none dark:prose-invert prose-headings:text-inherit">
+                  <ReactMarkdown>{m.text}</ReactMarkdown>
+                </div>
+                
+                {m.role === 'model' && (
+                  <button 
+                    onClick={() => playAudio(m.text, i)}
+                    className={cn(
+                      "sm:absolute flex ml-auto sm:ml-0 mt-2 sm:mt-0 sm:-right-12 sm:top-2 p-2 rounded-xl transition-all opacity-100 sm:opacity-0 group-hover:opacity-100",
+                      isPlaying === i ? "bg-green-500 text-white opacity-100 animate-pulse" : "bg-white border border-gray-100 text-gray-400 hover:text-green-500 hover:border-green-200"
+                    )}
+                  >
+                    <Volume2 size={16} />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          ))}
+          {isLoading && (
+            <motion.div 
+              layout
+              key="typing-indicator"
+              initial={{ opacity: 0, y: 15, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="flex w-full items-start gap-2 sm:gap-4 flex-row"
+            >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 mt-1 shadow-sm font-bold text-sm sm:text-lg bg-green-100 text-green-600">
+                汉
+              </div>
+              <div className="bg-white border border-gray-100 text-gray-700 rounded-[22px] sm:rounded-[28px] rounded-tl-sm sm:rounded-tl-none px-4 sm:px-6 py-3 sm:py-4 shadow-sm h-[48px] sm:h-[56px] flex items-center gap-1.5 min-w-[72px] justify-center">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Input Area */}
-      <div className="p-8 bg-white border-t border-gray-50">
+      <div className="p-4 sm:p-8 bg-white border-t border-gray-50">
         <div className="bg-gray-50 rounded-[28px] p-2 flex items-center gap-2 border border-gray-100 shadow-inner group focus-within:border-orange-200 transition-all">
           <input
             type="text"
