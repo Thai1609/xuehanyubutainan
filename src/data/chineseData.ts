@@ -2,7 +2,9 @@ export interface Radical {
   character: string;
   pinyin: string;
   meaning: string;
+  mnemonic?: string;
   category?: string;
+  variants?: string[];
 }
 
 export const RADICAL_CATEGORIES = [
@@ -11,13 +13,32 @@ export const RADICAL_CATEGORIES = [
     name: "Người & Quan hệ",
     icon: "Users",
     radicals: [
-      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (Người)" },
-      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (Phụ nữ)" },
-      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (Con cái)" },
-      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (Cha)" },
-      { character: "目", pinyin: "mù", meaning: "Bộ Mục (Mắt)" },
-      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (Miệng)" },
-      { character: "心", pinyin: "xīn", meaning: "Bộ Tâm (Tim/Tâm hồn)" },
+      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (Người)", mnemonic: "Hình ảnh một người đang đứng thẳng.", variants: ["人"] },
+      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (Phụ nữ)", mnemonic: "Hình ảnh người phụ nữ đang quỳ gối hoặc bồng con." },
+      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (Con cái)", mnemonic: "Hình ảnh em bé đang quấn tã, tâng vẫy tay chân." },
+      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (Cha)", mnemonic: "Hình ảnh hai bàn tay cầm gậy (biểu tượng quyền lực của cha)." },
+      { character: "老", pinyin: "lǎo", meaning: "Bộ Lão (Người già)", mnemonic: "Hình ảnh người già chống gậy, tóc bạc phơ." },
+      { character: "士", pinyin: "shì", meaning: "Bộ Sĩ (Kẻ sĩ/Người nam)", mnemonic: "Kẻ sĩ đứng thẳng, vai rộng hơn eo." },
+      { character: "儿", pinyin: "ér", meaning: "Bộ Nhi (Trẻ con)", mnemonic: "Hình ảnh đôi chân của đứa trẻ đang chạy nhảy." },
+    ]
+  },
+  {
+    id: "body",
+    name: "Cơ thể & Giác quan",
+    icon: "Heart",
+    radicals: [
+      { character: "目", pinyin: "mù", meaning: "Bộ Mục (Mắt)", mnemonic: "Hình ảnh con mắt xoay dọc." },
+      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (Miệng)", mnemonic: "Hình ảnh cái miệng đang há to." },
+      { character: "心", pinyin: "xīn", meaning: "Bộ Tâm (Tim/Tâm hồn)", mnemonic: "Hình ảnh quả tim với các ngăn và mạch máu.", variants: ["忄"] },
+      { character: "耳", pinyin: "ěr", meaning: "Bộ Nhĩ (Tai)", mnemonic: "Mô tả vành tai con người." },
+      { character: "自", pinyin: "zì", meaning: "Bộ Tự (Mũi/Tự mình)", mnemonic: "Hình ảnh cái mũi (người Trung Quốc thường chỉ vào mũi khi nói về mình)." },
+      { character: "舌", pinyin: "shé", meaning: "Bộ Thiệt (Lưỡi)", mnemonic: "Hình ảnh cái lưỡi thè ra từ miệng." },
+      { character: "牙", pinyin: "yá", meaning: "Bộ Nha (Răng)", mnemonic: "Hình ảnh những chiếc răng cửa." },
+      { character: "手", pinyin: "shǒu", meaning: "Bộ Thủ (Tay)", mnemonic: "Hình ảnh bàn tay với các ngón tay." },
+      { character: "足", pinyin: "zú", meaning: "Bộ Túc (Chân)", mnemonic: "Hình ảnh cái chân với đầu gối và bàn chân." },
+      { character: "身", pinyin: "shēn", meaning: "Bộ Thân (Thân thể)", mnemonic: "Hình ảnh người phụ nữ mang bầu (biểu tượng cho thân thể)." },
+      { character: "骨", pinyin: "gǔ", meaning: "Bộ Cốt (Xương)", mnemonic: "Cấu trúc khung xương trong cơ thể." },
+      { character: "肉", pinyin: "ròu", meaning: "Bộ Nhục (Thịt)", mnemonic: "Hình ảnh miếng thịt cắt lát." },
     ]
   },
   {
@@ -25,11 +46,14 @@ export const RADICAL_CATEGORIES = [
     name: "Hành động & Di chuyển",
     icon: "Zap",
     radicals: [
-      { character: "辶", pinyin: "chuò", meaning: "Bộ Sước (Đi lại)" },
-      { character: "扌", pinyin: "shǒu", meaning: "Bộ Thủ (Tay - Hành động bằng tay)" },
-      { character: "足", pinyin: "zú", meaning: "Bộ Túc (Chân - Hành động bằng chân)" },
-      { character: "力", pinyin: "lì", meaning: "Bộ Lực (Sức mạnh)" },
-      { character: "走", pinyin: "zǒu", meaning: "Bộ Tẩu (Chạy/Đi)" },
+      { character: "辶", pinyin: "chuò", meaning: "Bộ Sước (Đi lại)", mnemonic: "Hình ảnh một người đang bước đi trên đường (biến thể của bộ Sước).", variants: ["辵"] },
+      { character: "扌", pinyin: "shǒu", meaning: "Bộ Thủ (Hành động bằng tay)", mnemonic: "Biến thể của chữ Thủ (Tay), dùng khi tay thực hiện hành động.", variants: ["手"] },
+      { character: "力", pinyin: "lì", meaning: "Bộ Lực (Sức mạnh)", mnemonic: "Hình ảnh cánh tay đang gồng lên hoặc cái cày đẩy dưới đất." },
+      { character: "走", pinyin: "zǒu", meaning: "Bộ Tẩu (Chạy/Đi)", mnemonic: "Hình ảnh một người đang vung tay chạy trên mặt đất." },
+      { character: "攵", pinyin: "pū", meaning: "Bộ Phốc (Đánh nhẹ)", mnemonic: "Hình ảnh bàn tay cầm roi đang quất nhẹ." },
+      { character: "彳", pinyin: "chì", meaning: "Bộ Xích (Bước chân trái)", mnemonic: "Mô tả bước chân ngắn bên trái." },
+      { character: "止", pinyin: "zhǐ", meaning: "Bộ Chỉ (Dừng lại)", mnemonic: "Đồ hình bàn chân dừng lại, không tiếp tục bước đi." },
+      { character: "殳", pinyin: "shū", meaning: "Bộ Thù (Binh khí/Đánh)", mnemonic: "Tay cầm một cây đại đao hoặc binh khí dài." },
     ]
   },
   {
@@ -37,26 +61,79 @@ export const RADICAL_CATEGORIES = [
     name: "Động vật",
     icon: "Bird",
     radicals: [
-      { character: "犭", pinyin: "quǎn", meaning: "Bộ Khuyển (Thú bốn chân)" },
-      { character: "鸟", pinyin: "niǎo", meaning: "Bộ Điểu (Chim)" },
-      { character: "虫", pinyin: "chóng", meaning: "Bộ Trùng (Sâu bọ/Côn trùng)" },
-      { character: "马", pinyin: "mǎ", meaning: "Bộ Mã (Ngựa)" },
-      { character: "鱼", pinyin: "yú", meaning: "Bộ Ngư (Cá)" },
+      { character: "犭", pinyin: "quǎn", meaning: "Bộ Khuyển (Thú bốn chân)", mnemonic: "Hình ảnh con chó đang đứng nghiêng, xòe móng vuốt." },
+      { character: "鸟", pinyin: "niǎo", meaning: "Bộ Điểu (Chim)", mnemonic: "Hình ảnh chú chim với mỏ, cánh và đuôi." },
+      { character: "虫", pinyin: "chóng", meaning: "Bộ Trùng (Sâu bọ/Côn trùng)", mnemonic: "Hình ảnh con sâu đang bò." },
+      { character: "马", pinyin: "mǎ", meaning: "Bộ Mã (Ngựa)", mnemonic: "Hình ảnh con ngựa với bờm và đuôi dài." },
+      { character: "鱼", pinyin: "yú", meaning: "Bộ Ngư (Cá)", mnemonic: "Hình ảnh con cá với đầu, vảy và đuôi." },
+      { character: "贝", pinyin: "bèi", meaning: "Bộ Bối (Vỏ sò/Tiền)", mnemonic: "Vỏ sò, đơn vị tiền tệ quý giá thời xưa." },
+      { character: "纟", pinyin: "mì", meaning: "Bộ Mịch (Sợi tơ)", mnemonic: "Những sợi tơ tằm quấn lại với nhau." },
+      { character: "羊", pinyin: "yáng", meaning: "Bộ Dương (Con dê/cừu)", mnemonic: "Cái đầu dê với hai chiếc sừng cong." },
+      { character: "牛", pinyin: "niú", meaning: "Bộ Ngưu (Con trâu/bò)", mnemonic: "Cái đầu trâu với cặp sừng thẳng đứng." },
     ]
   },
   {
     id: "nature",
-    name: "Thiên nhiên & Vật chất",
-    icon: "Cloud",
+    name: "Thiên nhiên & Thời gian",
+    icon: "Sun",
     radicals: [
-      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (Cây cối)" },
-      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (Nước)" },
-      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (Lửa)" },
-      { character: "土", pinyin: "tǔ", meaning: "Bộ Thổ (Đất)" },
-      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (Mặt trời/Ngày)" },
-      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (Mặt trăng/Tháng)" },
-      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (Mưa)" },
-      { character: "金", pinyin: "jīn", meaning: "Bộ Kim (Kim loại/Vàng)" },
+      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (Cây cối)", mnemonic: "Hình ảnh một cái cây với tán lá và rễ." },
+      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (Nước)", mnemonic: "Ba giọt nước đang bắn ra.", variants: ["水"] },
+      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (Lửa)", mnemonic: "Hình ảnh ngọn lửa đang bốc cháy.", variants: ["灬"] },
+      { character: "土", pinyin: "tǔ", meaning: "Bộ Thổ (Đất)", mnemonic: "Mầm cây mọc lên từ mặt đất." },
+      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (Mặt trời/Ngày)", mnemonic: "Hình tròn của mặt trời với một vạch ở giữa." },
+      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (Mặt trăng/Tháng)", mnemonic: "Hình bán nguyệt của mặt trăng khuyết." },
+      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (Mưa)", mnemonic: "Những giọt mưa rơi xuống từ đám mây." },
+      { character: "金", pinyin: "jīn", meaning: "Bộ Kim (Kim loại/Vàng)", mnemonic: "Kim loại quý được cất giữ sâu dưới lòng đất." },
+      { character: "山", pinyin: "shān", meaning: "Bộ Sơn (Núi)", mnemonic: "Hình ảnh ba ngọn núi nhấp nhô." },
+      { character: "石", pinyin: "shí", meaning: "Bộ Thạch (Đá)", mnemonic: "Hòn đá nằm dưới chân vách núi." },
+      { character: "气", pinyin: "qì", meaning: "Bộ Khí (Hơi nước/Khí)", mnemonic: "Làn sương khói bay lượn trên không trung." },
+    ]
+  },
+  {
+    id: "objects",
+    name: "Vật dụng & Công cụ",
+    icon: "Box",
+    radicals: [
+      { character: "巾", pinyin: "jīn", meaning: "Bộ Cân (Khăn)", mnemonic: "Hình ảnh tấm vải/khăn treo trên giá." },
+      { character: "衣", pinyin: "yī", meaning: "Bộ Y (Áo quần)", mnemonic: "Hình vẽ chiếc áo có tà áo và tay áo." },
+      { character: "舟", pinyin: "zhōu", meaning: "Bộ Chu (Thuyền)", mnemonic: "Hình ảnh chiếc thuyền nhỏ lướt trên sông." },
+      { character: "车", pinyin: "chē", meaning: "Bộ Xa (Xe)", mnemonic: "Chiếc xe nhìn từ trên xuống với các bánh xe." },
+      { character: "门", pinyin: "mén", meaning: "Bộ Môn (Cửa)", mnemonic: "Hình ảnh hai cánh cửa của một ngôi nhà." },
+      { character: "玉", pinyin: "yù", meaning: "Bộ Ngọc (Đá quý/Ngọc)", mnemonic: "Những viên ngọc quý xâu thành chuỗi (có thêm một dấu chấm)." },
+      { character: "皿", pinyin: "mǐn", meaning: "Bộ Mãnh (Bát đĩa)", mnemonic: "Chiếc bát hoặc đĩa có chân đế." },
+      { character: "竹", pinyin: "zhú", meaning: "Bộ Trúc (Tre)", mnemonic: "Hai lá tre rủ xuống từ cành tre." },
+      { character: "刀", pinyin: "dāo", meaning: "Bộ Đao (Con dao)", mnemonic: "Hình ảnh một con dao cong sắc bén." },
+      { character: "弓", pinyin: "gōng", meaning: "Bộ Cung (Cái cung)", mnemonic: "Hình vẽ cái cung đang giương ra." },
+    ]
+  },
+  {
+    id: "plants",
+    name: "Thực vật & Ăn uống",
+    icon: "Leaf",
+    radicals: [
+      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (Cỏ/Cây cỏ)", variants: ["草"] },
+      { character: "禾", pinyin: "hé", meaning: "Bộ Hòa (Lúa)" },
+      { character: "米", pinyin: "mǐ", meaning: "Bộ Mễ (Gạo)" },
+      { character: "饣", pinyin: "shí", meaning: "Bộ Thực (Ăn)", variants: ["食"] },
+      { character: "瓜", pinyin: "guā", meaning: "Bộ Qua (Quả dưa)" },
+      { character: "豆", pinyin: "dòu", meaning: "Bộ Đậu (Hạt đậu)" },
+    ]
+  },
+  {
+    id: "society",
+    name: "Xã hội & Tư duy",
+    icon: "Users",
+    radicals: [
+      { character: "礻", pinyin: "shì", meaning: "Bộ Thị (Thần thánh/Cúng bái)", variants: ["示"] },
+      { character: "衤", pinyin: "yī", meaning: "Bộ Y (Biến thể của áo)", variants: ["衣"] },
+      { character: "疒", pinyin: "nè", meaning: "Bộ Nạch (Bệnh tật)" },
+      { character: "广", pinyin: "guǎng", meaning: "Bộ Nghiễm (Mái nhà/Tòa nhà)" },
+      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (Mái nhà)" },
+      { character: "文", pinyin: "wén", meaning: "Bộ Văn (Văn chương/Chữ nghĩa)" },
+      { character: "言", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói)", variants: ["讠"] },
+      { character: "讠", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói - Giản thể)", variants: ["言"] },
+      { character: "方", pinyin: "fāng", meaning: "Bộ Phương (Phuơng hướng)" },
     ]
   }
 ];
@@ -130,10 +207,10 @@ export const CHINESE_DATA: Topic[] = [
     icon: "MessageCircle",
     level: "HSK 1",
     radicals: [
-      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (người)" },
-      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (phụ nữ)" },
-      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (miệng)" },
-      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (con cái)" },
+      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (người)", mnemonic: "Hình ảnh một người đang đứng thẳng." },
+      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (phụ nữ)", mnemonic: "Hình ảnh người phụ nữ đang quỳ gối hoặc bồng con." },
+      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (miệng)", mnemonic: "Hình ảnh cái miệng đang há to." },
+      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (con cái)", mnemonic: "Hình ảnh em bé đang quấn tã, tâng vẫy tay chân." },
     ],
     vocabulary: [
       { character: "你", pinyin: "nǐ", meaning: "Bạn, anh, chị", example: "你好！", examplePinyin: "nǐ hǎo!", exampleTranslation: "Chào bạn!", level: "HSK 1" },
@@ -151,8 +228,13 @@ export const CHINESE_DATA: Topic[] = [
       { character: "干杯", pinyin: "gānbēi", meaning: "Cạn ly", example: "为了我们的友谊，干杯！", examplePinyin: "wèile wǒmen de yǒuyì, gānbēi!", exampleTranslation: "Vì tình hữu nghị của chúng ta, cạn ly!", level: "HSK 3" },
       { character: "介绍", pinyin: "jièshào", meaning: "Giới thiệu", example: "让我介绍一下自己。", examplePinyin: "ràng wǒ jièshào yīxià zìjǐ.", exampleTranslation: "Để tôi giới thiệu một chút về bản thân.", level: "HSK 2" },
       { character: "欢迎", pinyin: "huānyíng", meaning: "Hoan nghênh/Chào mừng", example: "欢迎来到北京！", examplePinyin: "huānyíng láidào běijīng!", exampleTranslation: "Chào mừng đến với Bắc Kinh!", level: "HSK 2" },
-      { character: "对不起", pinyin: "duìbuqǐ", meaning: "Xin lỗi", example: "对不起，我迟到了。", examplePinyin: "duìbuqǐ, wǒ chídào le.", exampleTranslation: "Xin lỗi, tôi đến muộn.", level: "HSK 1" },
+      { character: "对不起", pinyin: "duìbuqǐ", meaning: "Xin lỗi", example: "对不起，我遲到了。", examplePinyin: "duìbuqǐ, wǒ chídào le.", exampleTranslation: "Xin lỗi, tôi đến muộn.", level: "HSK 1" },
       { character: "没关系", pinyin: "méi guānxi", meaning: "Không sao đâu", example: "没关系，请进。", examplePinyin: "méi guānxi, qǐng jìn.", exampleTranslation: "Không sao, mời vào.", level: "HSK 1" },
+      { character: "认识", pinyin: "rènshi", meaning: "Quen biết", example: "认识你很高兴。", examplePinyin: "rènshi nǐ hěn gāoxìng.", exampleTranslation: "Rất vui được quen bạn.", level: "HSK 1" },
+      { character: "学生", pinyin: "xuésheng", meaning: "Học sinh", example: "我是留学生。", examplePinyin: "wǒ shì liú xuésheng.", exampleTranslation: "Tôi là lưu học sinh.", level: "HSK 1" },
+      { character: "大家", pinyin: "dàjiā", meaning: "Mọi người", example: "大家好！", examplePinyin: "dàjiā hǎo!", exampleTranslation: "Chào mọi người!", level: "HSK 1" },
+      { character: "同学", pinyin: "tóngxué", meaning: "Bạn cùng học", example: "他是我的同学。", examplePinyin: "tā shì wǒ de tóngxué.", exampleTranslation: "Anh ấy là bạn học của tôi.", level: "HSK 1" },
+      { character: "朋友", pinyin: "péngyou", meaning: "Bạn bè", example: "我们是好朋友。", examplePinyin: "wǒmen shì hǎo péngyou.", exampleTranslation: "Chúng tôi là bạn tốt của nhau.", level: "HSK 1" },
     ],
     grammar: [
       {
@@ -193,10 +275,10 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Utensils",
     level: "HSK 1-3",
     radicals: [
-      { character: "饣", pinyin: "shí", meaning: "Bộ Thực (ăn)" },
-      { character: "米", pinyin: "mǐ", meaning: "Bộ Mễ (gạo)" },
-      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (lửa)" },
-      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (cỏ, thực vật)" },
+      { character: "饣", pinyin: "shí", meaning: "Bộ Thực (ăn)", mnemonic: "Hình ảnh cái bát đựng thức ăn có nắp đậy." },
+      { character: "米", pinyin: "mǐ", meaning: "Bộ Mễ (gạo)", mnemonic: "Hình ảnh những hạt thóc/gạo đang nở ra." },
+      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (lửa)", mnemonic: "Hình ảnh ngọn lửa bùng cháy." },
+      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (cỏ, thực vật)", mnemonic: "Hai mầm cây mọc cạnh nhau trên mặt đất." },
     ],
     vocabulary: [
       { character: "吃", pinyin: "chī", meaning: "Ăn", example: "你想吃什么？", examplePinyin: "nǐ xiǎng chī shénme?", exampleTranslation: "Bạn muốn ăn gì?", level: "HSK 1" },
@@ -210,6 +292,24 @@ export const CHINESE_DATA: Topic[] = [
       { character: "苹果", pinyin: "píngguǒ", meaning: "Quả táo", example: "你想吃苹果吗？", examplePinyin: "nǐ xiǎng chī píngguǒ ma?", exampleTranslation: "Bạn muốn ăn táo không?", level: "HSK 1" },
       { character: "香蕉", pinyin: "xiāngjiāo", meaning: "Quả chuối", example: "桌子上有一个香蕉。", examplePinyin: "zhuōzi shàng yǒu yī ge xiāngjiāo.", exampleTranslation: "Trên bàn có một quả chuối.", level: "HSK 3" },
       { character: "西瓜", pinyin: "xīguā", meaning: "Dưa hấu", example: "夏天吃西瓜很舒服。", examplePinyin: "xiàtiān chī xīguā hěn shūfu.", exampleTranslation: "Mùa hè ăn dưa hấu rất thoải mái.", level: "HSK 3" },
+      { character: "汉堡", pinyin: "hànbǎo", meaning: "Hamburger", example: "我不喜欢吃汉堡。", examplePinyin: "wǒ bù xǐhuan chī hànbǎo.", exampleTranslation: "Tôi không thích ăn hamburger.", level: "HSK 4" },
+      { character: "火锅", pinyin: "huǒguō", meaning: "Lẩu", example: "成都的火锅很有名。", examplePinyin: "chéngdū de huǒguō hěn yǒumíng.", exampleTranslation: "Lẩu ở Thành Đô rất nổi tiếng.", level: "HSK 4" },
+      { character: "筷子", pinyin: "kuàizi", meaning: "Đôi đũa", example: "你会用筷子吗？", examplePinyin: "nǐ huì yòng kuàizi ma?", exampleTranslation: "Bạn biết dùng đũa không?", level: "HSK 3" },
+      { character: "米", pinyin: "mǐ", meaning: "Gạo/Gạo sống", example: "家里没米了。", examplePinyin: "jiā lǐ méi mǐ le.", exampleTranslation: "Trong nhà hết gạo rồi.", level: "HSK 2" },
+      { character: "面包", pinyin: "miànbāo", meaning: "Bánh mì", example: "我早餐吃面包。", examplePinyin: "wǒ zǎocān chī miànbāo.", exampleTranslation: "Tôi ăn sáng bằng bánh mì.", level: "HSK 2" },
+      { character: "饮料", pinyin: "yǐnliào", meaning: "Đồ uống", example: "你想喝什么饮料？", examplePinyin: "nǐ xiǎng hē shénme yǐnliào?", exampleTranslation: "Bạn muốn uống đồ uống gì?", level: "HSK 2" },
+      { character: "甜", pinyin: "tián", meaning: "Ngọt", example: "这个蛋糕太甜了。", examplePinyin: "zhè ge dàngāo tài tián le.", exampleTranslation: "Cái bánh này ngọt quá.", level: "HSK 3" },
+      { character: "苦", pinyin: "kǔ", meaning: "Đắng", example: "药很苦。", examplePinyin: "yào hěn kǔ.", exampleTranslation: "Thuốc rất đắng.", level: "HSK 3" },
+      { character: "辣", pinyin: "là", meaning: "Cay", example: "四川菜特别辣。", examplePinyin: "sìchuān cài tèbié là.", exampleTranslation: "Món Tứ Xuyên đặc biệt cay.", level: "HSK 3" },
+      { character: "葡萄", pinyin: "pútáo", meaning: "Quả nho", example: "这些葡萄很酸。", examplePinyin: "zhèxiē pútáo hěn suān.", exampleTranslation: "Những quả nho này rất chua.", level: "HSK 4" },
+      { character: "橙子", pinyin: "chéngzi", meaning: "Quả cam", example: "橙子含有很多维生素C。", examplePinyin: "chéngzi hán yǒu hěnduō wéishēngsù C.", exampleTranslation: "Cam chứa rất nhiều vitamin C.", level: "HSK 4" },
+      { character: "草莓", pinyin: "cǎoméi", meaning: "Quả dâu tây", example: "我爱吃草莓冰淇淋。", examplePinyin: "wǒ ài chī cǎoméi bīngqílín.", exampleTranslation: "Tôi thích ăn kem dâu tây.", level: "HSK 4" },
+      { character: "芒果", pinyin: "mángguǒ", meaning: "Quả xoài", example: "泰国的芒果很好吃。", examplePinyin: "tàiguó de mángguǒ hěn hǎochī.", exampleTranslation: "Xoài của Thái Lan rất ngon.", level: "HSK 4" },
+      { character: "菠萝", pinyin: "bōluó", meaning: "Quả dứa (thơm)", example: "这个菠萝还没熟。", examplePinyin: "zhè ge bōluó hái méi shú.", exampleTranslation: "Quả dứa này vẫn chưa chín.", level: "HSK 4" },
+      { character: "梨", pinyin: "lí", meaning: "Quả lê", example: "梨的水分很多。", examplePinyin: "lí de shuǐfèn hěnduō.", exampleTranslation: "Lê có rất nhiều nước.", level: "HSK 4" },
+      { character: "桃子", pinyin: "táozi", meaning: "Quả đào", example: " these桃子很新鲜。", examplePinyin: "zhèxiē táozi hěn xīnxiān.", exampleTranslation: "Những quả đào này rất tươi.", level: "HSK 4" },
+      { character: "荔枝", pinyin: "lìzhī", meaning: "Quả vải", example: "荔枝是夏天的水果。", examplePinyin: "lìzhī shì xiàtiān de shuǐguǒ.", exampleTranslation: "Vải là trái cây mùa hè.", level: "HSK 5" },
+      { character: "柠檬", pinyin: "níngméng", meaning: "Quả chanh", example: "柠檬非常酸。", examplePinyin: "níngméng fēicháng suān.", exampleTranslation: "Chanh cực kỳ chua.", level: "HSK 5" },
     ],
     grammar: [
       {
@@ -240,9 +340,9 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Briefcase",
     level: "HSK 3/4",
     radicals: [
-      { character: "力", pinyin: "lì", meaning: "Bộ Lực (sức mạnh)" },
-      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (cha)" },
-      { character: "𦘒", pinyin: "yù", meaning: "Bộ Duật (cây bút)" },
+      { character: "力", pinyin: "lì", meaning: "Bộ Lực (sức mạnh)", mnemonic: "Hình ảnh cánh tay đang gồng lên hoặc cái cày." },
+      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (cha)", mnemonic: "Hai bàn tay cầm vòi phun hoặc gậy thể hiện quyền kiểm soát." },
+      { character: "𦘒", pinyin: "yù", meaning: "Bộ Duật (cây bút)", mnemonic: "Bàn tay đang cầm cây bút lông để viết." },
     ],
     vocabulary: [
       { character: "工作", pinyin: "gōngzuò", meaning: "Công việc", example: "我喜欢我的工作。", examplePinyin: "wǒ xǐhuan wǒ de gōngzuò.", exampleTranslation: "Tôi thích công việc của tôi.", level: "HSK 1" },
@@ -256,6 +356,13 @@ export const CHINESE_DATA: Topic[] = [
       { character: "工资", pinyin: "gōngzī", meaning: "Tiền lương", example: "他的工资每月都很高。", examplePinyin: "tā de gōngzī měiyuè dōu hěn gāo.", exampleTranslation: "Lương của anh ấy mỗi tháng đều rất cao.", level: "HSK 4" },
       { character: "同事", pinyin: "tóngshì", meaning: "Đồng nghiệp", example: "我和同事的关系很好。", examplePinyin: "wǒ hé tóngshì de guānxì hěn hǎo.", exampleTranslation: "Mối quan hệ của tôi và đồng nghiệp rất tốt.", level: "HSK 4" },
       { character: "压力", pinyin: "yālì", meaning: "Áp lực", example: "最近工作的压力很大。", examplePinyin: "zuìjìn gōngzuò de yālì hěn dà.", exampleTranslation: "Gần đây áp lực công việc rất lớn.", level: "HSK 4" },
+      { character: "加班", pinyin: "jiābān", meaning: "Làm thêm giờ", example: "今天我要加班。", examplePinyin: "jīntiān wǒ yào jiābān.", exampleTranslation: "Hôm nay tôi phải làm thêm giờ.", level: "HSK 4" },
+      { character: "出差", pinyin: "chūchāi", meaning: "Đi công tác", example: "下周我要去上海出差。", examplePinyin: "xià zhōu wǒ yào qù shànghǎi chūchāi.", exampleTranslation: "Tuần tới tôi đi Thượng Hải công tác.", level: "HSK 4" },
+      { character: "工资", pinyin: "gōngzī", meaning: "Lương", example: "每个月五号发工资。", examplePinyin: "měi ge yuè wǔ hào fā gōngzī.", exampleTranslation: "Mùng 5 hàng tháng phát lương.", level: "HSK 4" },
+      { character: "面试", pinyin: "miànshì", meaning: "Phỏng vấn", example: "明天我有一个面试。", examplePinyin: "míngtiān wǒ yǒu yī ge miànshì.", exampleTranslation: "Mai tôi có một buổi phỏng vấn.", level: "HSK 4" },
+      { character: "简历", pinyin: "jiǎnlì", meaning: "Sơ yếu lý lịch/CV", example: "这是我的简历。", examplePinyin: "zhè shì wǒ de jiǎnlì.", exampleTranslation: "Đây là CV của tôi.", level: "HSK 4" },
+      { character: "退休", pinyin: "tuìxiū", meaning: "Nghỉ hưu", example: "他已经退休了。", examplePinyin: "tā yǐjīng tuìxiū le.", exampleTranslation: "Ông ấy đã nghỉ hưu rồi.", level: "HSK 5" },
+      { character: "辞职", pinyin: "cízhí", meaning: "Từ chức/Nghỉ việc", example: "我想辞职。", examplePinyin: "wǒ xiǎng cízhí.", exampleTranslation: "Tôi muốn nghỉ việc.", level: "HSK 5" },
     ],
     grammar: [
       {
@@ -286,9 +393,9 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Leaf",
     level: "HSK 4/5",
     radicals: [
-      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (cây cối)" },
-      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (nước)" },
-      { character: "气", pinyin: "qì", meaning: "Bộ Khí (không khí)" },
+      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (cây cối)", mnemonic: "Hình ảnh cây có tán và rễ đâm sâu." },
+      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (nước)", mnemonic: "Ba giọt nước đang bắn ra." },
+      { character: "气", pinyin: "qì", meaning: "Bộ Khí (không khí)", mnemonic: "Làn hơi nước bốc lên từ mặt đất." },
     ],
     vocabulary: [
       { character: "环境", pinyin: "huánjìng", meaning: "Môi trường", example: "我们要保护环境。", examplePinyin: "wǒmen yào bǎohù huánjìng.", exampleTranslation: "Chúng ta cần bảo vệ môi trường.", level: "HSK 4" },
@@ -300,6 +407,12 @@ export const CHINESE_DATA: Topic[] = [
       { character: "阳光", pinyin: "yángguāng", meaning: "Ánh nắng", example: "今天的阳光很灿烂。", examplePinyin: "jīntiān de yángguāng hěn cànlàn.", exampleTranslation: "Ánh nắng hôm nay rất rực rỡ.", level: "HSK 4" },
       { character: "风景", pinyin: "fēngjǐng", meaning: "Phong cảnh", example: "这里的风景美得像画一样。", examplePinyin: "zhèlǐ de fēngjǐng měi de xiàng huà yīyàng.", exampleTranslation: "Phong cảnh ở đây đẹp như tranh vẽ vậy.", level: "HSK 4" },
       { character: "森林", pinyin: "sēnlín", meaning: "Rừng rậm", example: "我们要保护森林资源。", examplePinyin: "wǒmen yào bǎohù sēnlín zīyuán.", exampleTranslation: "Chúng ta cần bảo vệ tài nguyên rừng.", level: "HSK 5" },
+      { character: "海洋", pinyin: "hǎiyáng", meaning: "Đại dương", example: "海洋里有很多生物。", examplePinyin: "hǎiyáng lǐ yǒu hěnduō shēngwù.", exampleTranslation: "Trong đại dương có rất nhiều sinh vật.", level: "HSK 5" },
+      { character: "气候", pinyin: "qìhòu", meaning: "Khí hậu", example: "全球气候变暖。", examplePinyin: "quánqiú qìhòu biàn nuǎn.", exampleTranslation: "Khí hậu toàn cầu nóng lên.", level: "HSK 5" },
+      { character: "沙漠", pinyin: "shāmò", meaning: "Sa mạc", example: "沙漠里缺水。", examplePinyin: "shāmò lǐ quē shuǐ.", exampleTranslation: "Trong sa mạc thiếu nước.", level: "HSK 5" },
+      { character: "河流", pinyin: "héliú", meaning: "Sông ngòi", example: "这条河流很长。", examplePinyin: "zhè tiáo héliú hěn cháng.", exampleTranslation: "Con sông này rất dài.", level: "HSK 4" },
+      { character: "低碳", pinyin: "dītàn", meaning: "Cacbon thấp/Sống xanh", example: "我们要坚持低碳生活。", examplePinyin: "wǒmen yào jiānchí dītàn shēnghuó.", exampleTranslation: "Chúng ta cần kiên trì lối sống xanh.", level: "HSK 6" },
+      { character: "草原", pinyin: "cǎoyuán", meaning: "Thảo nguyên", example: "内蒙古有美丽的草原。", examplePinyin: "nèiménggǔ yǒu měilì de cǎoyuán.", exampleTranslation: "Nội Mông có thảo nguyên xinh đẹp.", level: "HSK 5" },
     ],
     grammar: [
       {
@@ -320,9 +433,9 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Smartphone",
     level: "HSK 4/5",
     radicals: [
-      { character: "电", pinyin: "diàn", meaning: "Điện" },
-      { character: "钅", pinyin: "jīn", meaning: "Bộ Kim (kim loại)" },
-      { character: "网", pinyin: "wǎng", meaning: "Bộ Võng (mạng lưới)" },
+      { character: "电", pinyin: "diàn", meaning: "Điện", mnemonic: "Tia sét đánh xuống ruộng đồng." },
+      { character: "钅", pinyin: "jīn", meaning: "Bộ Kim (kim loại)", mnemonic: "Kim loại quý được nung chảy và rèn luyện." },
+      { character: "网", pinyin: "wǎng", meaning: "Bộ Võng (mạng lưới)", mnemonic: "Hình ảnh mắt lưới đánh cá." },
     ],
     vocabulary: [
       { character: "互联网", pinyin: "hùliánwǎng", meaning: "Internet", example: "互联网改变了我们的生活。", examplePinyin: "hùliánwǎng gǎibiàn le wǒmen de shēnghuó.", exampleTranslation: "Internet đã thay đổi cuộc sống của chúng ta.", level: "HSK 5" },
@@ -334,6 +447,13 @@ export const CHINESE_DATA: Topic[] = [
       { character: "电脑", pinyin: "diànnǎo", meaning: "Máy tính", example: "我买了一台新电脑。", examplePinyin: "wǒ mǎi le yī tái xīn diànnǎo.", exampleTranslation: "Tôi đã mua một chiếc máy tính mới.", level: "HSK 1" },
       { character: "电子邮件", pinyin: "diànzǐ yóujiàn", meaning: "Email", example: "请给我发电子邮件。", examplePinyin: "qǐng gěi wǒ fā diànzǐ yóujiàn.", exampleTranslation: "Vui lòng gửi email cho tôi.", level: "HSK 3" },
       { character: "网站", pinyin: "wǎngzhàn", meaning: "Trang web", example: "这个网站有很多有用的资料。", examplePinyin: "zhè ge wǎngzhàn yǒu hěnduō yǒuyòng de zīliào.", exampleTranslation: "Trang web này có rất nhiều tài liệu hữu ích.", level: "HSK 4" },
+      { character: "密码", pinyin: "mìmǎ", meaning: "Mật mã/Password", example: "别告诉别人你的密码。", examplePinyin: "bié gàosu biéren nǐ de mìmǎ.", exampleTranslation: "Đừng nói với người khác mật khẩu của bạn.", level: "HSK 4" },
+      { character: "屏幕", pinyin: "píngmù", meaning: "Màn hình", example: "屏幕坏了。", examplePinyin: "píngmù huài le.", exampleTranslation: "Màn hình hỏng rồi.", level: "HSK 5" },
+      { character: "软件", pinyin: "ruǎnjiàn", meaning: "Phần mềm", example: "下载一个新软件。", examplePinyin: "xiàzǎi yī ge xīn ruǎnjiàn.", exampleTranslation: "Tải một phần mềm mới.", level: "HSK 4" },
+      { character: "硬件", pinyin: "yìngjiàn", meaning: "Phần cứng", example: "电脑硬件需要升级。", examplePinyin: "diànnǎo yìngjiàn xūyào shēngjí.", exampleTranslation: "Phần cứng máy tính cần nâng cấp.", level: "HSK 5" },
+      { character: "信号", pinyin: "xìnhào", meaning: "Tín hiệu/Sóng", example: "这里的信号不太好。", examplePinyin: "zhèlǐ de xìnhào bù tài hǎo.", exampleTranslation: "Sóng ở đây không tốt lắm.", level: "HSK 4" },
+      { character: "电池", pinyin: "diànchí", meaning: "Pin", example: "手机没电池了。", examplePinyin: "shǒujī méi diànchí le.", exampleTranslation: "Điện thoại hết pin rồi.", level: "HSK 4" },
+      { character: "连接", pinyin: "liánjiē", meaning: "Kết nối", example: "连接Wi-Fi。", examplePinyin: "liánjiē Wi-Fi.", exampleTranslation: "Kết nối Wi-Fi.", level: "HSK 5" },
     ],
     grammar: [
       {
@@ -354,10 +474,10 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Users",
     level: "HSK 1/2",
     radicals: [
-      { character: "女", pinyin: "nǚ", meaning: "Nữ (phụ nữ)" },
-      { character: "子", pinyin: "zǐ", meaning: "Tử (con cái)" },
-      { character: "父", pinyin: "fù", meaning: "Phụ (cha)" },
-      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (mái nhà)" },
+      { character: "女", pinyin: "nǚ", meaning: "Nữ (phụ nữ)", mnemonic: "Người phụ nữ khéo léo trong các công việc gia đình." },
+      { character: "子", pinyin: "zǐ", meaning: "Tử (con cái)", mnemonic: "Đứa con bé bỏng được bế trên tay." },
+      { character: "父", pinyin: "fù", meaning: "Phụ (cha)", mnemonic: "Người cha trụ cột cầm roi/gậy dạy bảo con cái." },
+      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (mái nhà)", mnemonic: "Hình ảnh mái nhà che chở gia đình." },
     ],
     vocabulary: [
       { character: "家", pinyin: "jiā", meaning: "Nhà/Gia đình", example: "你家有几口人？", examplePinyin: "nǐ jiā yǒu jǐ kǒu rén?", exampleTranslation: "Nhà bạn có mấy người?", level: "HSK 1" },
@@ -373,6 +493,10 @@ export const CHINESE_DATA: Topic[] = [
       { character: "奶奶", pinyin: "nǎinai", meaning: "Bà nội", example: "奶奶在公园散步。", examplePinyin: "nǎinai zài gōngyuán sànbù.", exampleTranslation: "Bà nội đang đi dạo trong công viên.", level: "HSK 3" },
       { character: "叔叔", pinyin: "shūshu", meaning: "Chú", example: "这位是我的叔叔。", examplePinyin: "zhè wèi shì wǒ de shūshu.", exampleTranslation: "Vị này là chú của tôi.", level: "HSK 3" },
       { character: "阿姨", pinyin: "āyí", meaning: "Dì/Cô", example: "阿姨，您好！", examplePinyin: "āyí, nín hǎo!", exampleTranslation: "Chào dì ạ!", level: "HSK 3" },
+      { character: "祖父", pinyin: "zǔfù", meaning: "Ông nội (trang trọng)", example: "我的祖父是一名老师。", examplePinyin: "wǒ de zǔfù shì yī míng lǎoshī.", exampleTranslation: "Ông nội tôi là một giáo viên.", level: "HSK 4" },
+      { character: "孙子", pinyin: "sūnzi", meaning: "Cháu trai", example: "他很疼爱他的孙子。", examplePinyin: "tā hěn téng'ài tā de sūnzi.", exampleTranslation: "Ông ấy rất yêu quý cháu trai của mình.", level: "HSK 4" },
+      { character: "亲戚", pinyin: "qīnqi", meaning: "Họ hàng", example: "家里来了很多亲戚。", examplePinyin: "jiā lǐ lái le hěnduō qīnqi.", exampleTranslation: "Trong nhà có rất nhiều họ hàng đến chơi.", level: "HSK 4" },
+      { character: "邻居", pinyin: "línjū", meaning: "Hàng xóm", example: "我们的邻居很友好。", examplePinyin: "wǒmen de línjū hěn yǒuhǎo.", exampleTranslation: "Hàng xóm của chúng tôi rất thân thiện.", level: "HSK 4" },
     ],
     grammar: [
       {
@@ -404,9 +528,9 @@ export const CHINESE_DATA: Topic[] = [
     icon: "ShoppingBag",
     level: "HSK 1-3",
     radicals: [
-      { character: "贝", pinyin: "bèi", meaning: "Bộ Bối (tiền bạc, quý giá)" },
-      { character: "钅", pinyin: "jīn", meaning: "Bộ Kim (kim loại, tiền)" },
-      { character: "𬃷", pinyin: "mǎ", meaning: "Bộ Mã (con ngựa)" },
+      { character: "贝", pinyin: "bèi", meaning: "Bộ Bối (tiền bạc, quý giá)", mnemonic: "Hình ảnh vỏ sò (tiền cổ của người Trung Quốc)." },
+      { character: "钅", pinyin: "jīn", meaning: "Bộ Kim (kim loại, tiền)", mnemonic: "Kim loại quý được tích trữ trong hầm." },
+      { character: "𬃷", pinyin: "mǎ", meaning: "Bộ Mã (con ngựa)", mnemonic: "Phương tiện vận chuyển hàng hóa giao thương ngày xưa." },
     ],
     vocabulary: [
       { character: "钱", pinyin: "qián", meaning: "Tiền", example: "我有钱。", exampleTranslation: "Tôi có tiền.", level: "HSK 1" },
@@ -420,6 +544,11 @@ export const CHINESE_DATA: Topic[] = [
       { character: "打折", pinyin: "dǎzhé", meaning: "Giảm giá", example: "商场正在打折。", exampleTranslation: "Trung tâm thương mại đang giảm giá.", level: "HSK 4" },
       { character: "信用卡", pinyin: "xìnyòngkǎ", meaning: "Thẻ tín dụng", example: "你可以用信用卡付钱。", exampleTranslation: "Bạn có thể thanh toán bằng thẻ tín dụng.", level: "HSK 4" },
       { character: "价钱", pinyin: "jiàqian", meaning: "Giá cả", example: "这件衣服的价钱太贵了。", exampleTranslation: "Giá của chiếc áo này đắt quá.", level: "HSK 3" },
+      { character: "收银台", pinyin: "shōuyíntái", meaning: "Quầy thu ngân", example: "请到收银台付钱。", examplePinyin: "qǐng dào shōuyíntái fùqián.", exampleTranslation: "Vui lòng đến quầy thu ngân thanh toán.", level: "HSK 4" },
+      { character: "零钱", pinyin: "língqián", meaning: "Tiền lẻ", example: "你有没有零钱？", examplePinyin: "nǐ yǒu méiyǒu língqián?", exampleTranslation: "Bạn có tiền lẻ không?", level: "HSK 4" },
+      { character: "换钱", pinyin: "huànqián", meaning: "Đổi tiền", example: "我想换点人民币。", examplePinyin: "wǒ xiǎng huàn diǎn rénmínbì.", exampleTranslation: "Tôi muốn đổi ít nhân dân tệ.", level: "HSK 3" },
+      { character: "试衣间", pinyin: "shìyījiān", meaning: "Phòng thử đồ", example: "试衣间在那边。", examplePinyin: "shìyījiān zài nàbiān.", exampleTranslation: "Phòng thử đồ ở đằng kia.", level: "HSK 4" },
+      { character: "售后服务", pinyin: "shòuhòu fúwù", meaning: "Dịch vụ hậu mãi", example: "这家店的售后服务很好。", examplePinyin: "zhè jiā diàn de shòuhòu fúwù hěn hǎo.", exampleTranslation: "Dịch vụ hậu mãi của cửa hàng này rất tốt.", level: "HSK 5" },
     ],
     grammar: [
       {
@@ -450,9 +579,9 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Clock",
     level: "HSK 1/2",
     radicals: [
-      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (mặt trời, ngày)" },
-      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (mưa)" },
-      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (mặt trăng, tháng)" },
+      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (mặt trời, ngày)", mnemonic: "Hình ảnh mặt trời tỏa sáng ban ngày." },
+      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (mưa)", mnemonic: "Mưa rơi rơi từ bầu trời cao." },
+      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (mặt trăng, tháng)", mnemonic: "Mặt trăng khuyết chiếu sáng ban đêm." },
     ],
     vocabulary: [
       { character: "现在", pinyin: "xiànzài", meaning: "Bây giờ", example: "现在几点？", exampleTranslation: "Bây giờ là mấy giờ?", level: "HSK 1" },
@@ -467,6 +596,12 @@ export const CHINESE_DATA: Topic[] = [
       { character: "夏天", pinyin: "xiàtiān", meaning: "Mùa hè", example: "夏天的天气很热。", exampleTranslation: "Thời tiết mùa hè rất nóng.", level: "HSK 2" },
       { character: "冬天", pinyin: "dōngtiān", meaning: "Mùa đông", example: "冬天下雪了。", exampleTranslation: "Mùa đông tuyết rơi rồi.", level: "HSK 2" },
       { character: "特别", pinyin: "tèbié", meaning: "Đặc biệt", example: "今天的天气特别好。", exampleTranslation: "Thời tiết hôm nay đặc biệt tốt.", level: "HSK 3" },
+      { character: "刮风", pinyin: "guāfēng", meaning: "Nổi gió", example: "外面正在刮风。", examplePinyin: "wàimiàn zhèngzài guāfēng.", exampleTranslation: "Bên ngoài đang nổi gió.", level: "HSK 3" },
+      { character: "打雷", pinyin: "dǎléi", meaning: "Sấm sét", example: "快要打雷了。", examplePinyin: "kuàiyào dǎléi le.", exampleTranslation: "Sắp có sấm sét rồi.", level: "HSK 4" },
+      { character: "台风", pinyin: "táifēng", meaning: "Bão", example: "台风要来了。", examplePinyin: "táifēng yào lái le.", exampleTranslation: "Bão sắp đến rồi.", level: "HSK 4" },
+      { character: "预报", pinyin: "yùbào", meaning: "Dự báo", example: "天气预报说明天有雨。", examplePinyin: "tiānqì yùbào shuō míngtiān yǒu yǔ.", exampleTranslation: "Dự báo thời tiết nói mai có mưa.", level: "HSK 4" },
+      { character: "暖和", pinyin: "nuǎnhuo", meaning: "Ấm áp", example: "春天很暖和。", examplePinyin: "chūntiān hěn nuǎnhuo.", exampleTranslation: "Mùa xuân rất ấm áp.", level: "HSK 3" },
+      { character: "凉快", pinyin: "liángkuai", meaning: "Mát mẻ", example: "下雨后很凉快。", examplePinyin: "xià yǔ hòu hèn liángkuai.", exampleTranslation: "Sau cơn mưa rất mát mẻ.", level: "HSK 3" },
     ],
     grammar: [
       {
@@ -559,6 +694,12 @@ export const CHINESE_DATA: Topic[] = [
       { character: "地铁", pinyin: "dìtiě", meaning: "Tàu điện ngầm", example: "我每天坐地铁上班。", exampleTranslation: "Tôi đi tàu điện ngầm đi làm mỗi ngày.", level: "HSK 3" },
       { character: "行李箱", pinyin: "xínglixiāng", meaning: "Va li", example: "这个行李箱太重了。", exampleTranslation: "Chiếc va li này nặng quá.", level: "HSK 3" },
       { character: "航班", pinyin: "hángbān", meaning: "Chuyến bay", example: "我们要查一下航班的时间。", exampleTranslation: "Chúng ta cần tra thời gian chuyến bay.", level: "HSK 4" },
+      { character: "拥堵", pinyin: "yōngdǔ", meaning: "Tắc nghẽn", example: "北京的交通很拥堵。", examplePinyin: "běijīng de jiāotōng hěn yōngdǔ.", exampleTranslation: "Giao thông ở Bắc Kinh rất tắc nghẽn.", level: "HSK 5" },
+      { character: "车钥匙", pinyin: "chē yàoshi", meaning: "Chìa khóa xe", example: "我找不到车钥匙了。", examplePinyin: "wǒ zhǎo bù dào chē yàoshi le.", exampleTranslation: "Tôi không tìm thấy chìa khóa xe rồi.", level: "HSK 4" },
+      { character: "红绿灯", pinyin: "hónglǜdēng", meaning: "Đèn giao thông", example: "过马路要注意红绿灯。", examplePinyin: "guò mǎlù yào zhùyì hónglǜdēng.", exampleTranslation: "Qua đường phải chú ý đèn giao thông.", level: "HSK 4" },
+      { character: "直走", pinyin: "zhízǒu", meaning: "Đi thẳng", example: "从这里一直走。", examplePinyin: "cóng zhèlǐ yīzhí zǒu.", exampleTranslation: "Từ đây hẵng đi thẳng.", level: "HSK 2" },
+      { character: "向左转", pinyin: "xiàng zuǒ zhuǎn", meaning: "Rẽ trái", example: "前面向左转。", examplePinyin: "qiánmiàn xiàng zuǒ zhuǎn.", exampleTranslation: "Phía trước hẵng rẽ trái.", level: "HSK 2" },
+      { character: "加油站", pinyin: "jiāyóuzhàn", meaning: "Trạm xăng", example: "附近有加油站吗？", examplePinyin: "fùjìn yǒu jiāyóuzhàn ma?", exampleTranslation: "Gần đây có trạm xăng không?", level: "HSK 4" },
     ],
     grammar: [
       {
@@ -675,30 +816,30 @@ export const CHINESE_DATA: Topic[] = [
     icon: "Grid",
     level: "Cơ bản",
     radicals: [
-      { character: "一", pinyin: "yī", meaning: "Nhất (Số 1)" },
-      { character: "丨", pinyin: "gǔn", meaning: "Cổn (Sổ)" },
-      { character: "丶", pinyin: "zhǔ", meaning: "Chủ (Chấm)" },
-      { character: "丿", pinyin: "piě", meaning: "Phiệt (Phẩy)" },
-      { character: "乙", pinyin: "yǐ", meaning: "Ất" },
-      { character: "亅", pinyin: "jué", meaning: "Quyết (Móc)" },
-      { character: "二", pinyin: "èr", meaning: "Nhị (Số 2)" },
-      { character: "亠", pinyin: "tóu", meaning: "Đầu" },
-      { character: "人", pinyin: "rén", meaning: "Nhân (Người)" },
-      { character: "儿", pinyin: "ér", meaning: "Nhi (Trẻ)" },
-      { character: "入", pinyin: "rù", meaning: "Nhập (Vào)" },
-      { character: "八", pinyin: "bā", meaning: "Bát (Số 8)" },
-      { character: "冂", pinyin: "jiōng", meaning: "Quynh (Vùng biên)" },
-      { character: "冖", pinyin: "mì", meaning: "Mịch (Trùm lên)" },
-      { character: "冫", pinyin: "bīng", meaning: "Băng (Nước đá)" },
-      { character: "几", pinyin: "jī", meaning: "Kỷ (Cái ghế)" },
-      { character: "凵", pinyin: "qiǔ", meaning: "Khảm (Há miệng)" },
-      { character: "刀", pinyin: "dāo", meaning: "Đao (Con dao)" },
-      { character: "力", pinyin: "lì", meaning: "Lực (Sức mạnh)" },
-      { character: "勹", pinyin: "bāo", meaning: "Bao (Bọc)" },
-      { character: "匕", pinyin: "bǐ", meaning: "Chủy (Cái thìa)" },
-      { character: "匚", pinyin: "fāng", meaning: "Phương (Tủ đựng)" },
-      { character: "匸", pinyin: "xì", meaning: "Hệ (Che đậy)" },
-      { character: "十", pinyin: "shí", meaning: "Thập (Số 10)" },
+      { character: "一", pinyin: "yī", meaning: "Nhất (Số 1)", mnemonic: "Một vạch nằm ngang duy nhất." },
+      { character: "丨", pinyin: "gǔn", meaning: "Cổn (Sổ)", mnemonic: "Một vạch thẳng đứng từ trên xuống." },
+      { character: "丶", pinyin: "zhǔ", meaning: "Chủ (Chấm)", mnemonic: "Một dấu chấm nhỏ như giọt nước." },
+      { character: "丿", pinyin: "piě", meaning: "Phiệt (Phẩy)", mnemonic: "Nét phẩy xéo từ trên xuống trái." },
+      { character: "乙", pinyin: "yǐ", meaning: "Ất", mnemonic: "Hình ảnh mầm cây đang vươn lên." },
+      { character: "亅", pinyin: "jué", meaning: "Quyết (Móc)", mnemonic: "Nét sổ thẳng có móc ngược lên ở cuối." },
+      { character: "二", pinyin: "èr", meaning: "Nhị (Số 2)", mnemonic: "Hai vạch nằm ngang song song." },
+      { character: "亠", pinyin: "tóu", meaning: "Đầu", mnemonic: "Hình ảnh cái nắp hoặc phần trên của vật." },
+      { character: "人", pinyin: "rén", meaning: "Nhân (Người)", mnemonic: "Hình ảnh đôi chân của người đang đi." },
+      { character: "儿", pinyin: "ér", meaning: "Nhi (Trẻ)", mnemonic: "Hình đôi chân của đứa trẻ đang chạy nhảy." },
+      { character: "入", pinyin: "rù", meaning: "Nhập (Vào)", mnemonic: "Hình ảnh lối đi thu hẹp dần vào trong." },
+      { character: "八", pinyin: "bā", meaning: "Bát (Số 8)", mnemonic: "Hai nét hướng ra hai bên như sự chia cắt." },
+      { character: "冂", pinyin: "jiōng", meaning: "Quynh (Vùng biên)", mnemonic: "Hình ảnh biên giới bao quanh một vùng đất." },
+      { character: "冖", pinyin: "mì", meaning: "Mịch (Trùm lên)", mnemonic: "Hình ảnh một tấm khăn trùm lên vật gì đó." },
+      { character: "冫", pinyin: "bīng", meaning: "Băng (Nước đá)", mnemonic: "Hai giọt nước đông cứng thành đá." },
+      { character: "几", pinyin: "jī", meaning: "Kỷ (Cái ghế)", mnemonic: "Hình ảnh cái ghế băng thời xưa." },
+      { character: "凵", pinyin: "qiǔ", meaning: "Khảm (Há miệng)", mnemonic: "Hình ảnh cái hố hoặc cái miệng đang há." },
+      { character: "刀", pinyin: "dāo", meaning: "Đao (Con dao)", mnemonic: "Hình ảnh lưỡi dao sắc bén." },
+      { character: "力", pinyin: "lì", meaning: "Lực (Sức mạnh)", mnemonic: "Biểu tượng cho sức mạnh cơ bắp hoặc cái cày." },
+      { character: "勹", pinyin: "bāo", meaning: "Bao (Bọc)", mnemonic: "Hình ảnh một người đang ôm bọc vật gì đó." },
+      { character: "匕", pinyin: "bǐ", meaning: "Chủy (Cái thìa)", mnemonic: "Hình ảnh chiếc thìa nhỏ hoặc cái muôi." },
+      { character: "匚", pinyin: "fāng", meaning: "Phương (Tủ đựng)", mnemonic: "Hình ảnh cái tủ đựng đồ có nắp mở bên phải." },
+      { character: "匸", pinyin: "xì", meaning: "Hệ (Che đậy)", mnemonic: "Hình ảnh vật được che đậy kín đáo." },
+      { character: "十", pinyin: "shí", meaning: "Thập (Số 10)", mnemonic: "Sự kết hợp của trục dọc và trục ngang, biểu thị sự đầy đủ." },
     ],
     vocabulary: [
       { character: "字", pinyin: "zì", meaning: "Chữ", example: "这个字怎么读？", exampleTranslation: "Chữ này đọc thế nào?", level: "HSK 1" },
@@ -995,6 +1136,68 @@ export const CHINESE_DATA: Topic[] = [
         examples: [
           { chinese: "一个人", pinyin: "yī ge rén", translation: "Một người" },
           { chinese: "三个苹果", pinyin: "sān ge píngguǒ", translation: "Ba quả táo" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "house-living",
+    title: "Nhà cửa & Đời sống",
+    description: "Nội thất và vật dụng gia đình",
+    icon: "Home",
+    level: "HSK 2-3",
+    radicals: [
+      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (mái nhà)" },
+      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (gỗ/đồ gỗ)" },
+    ],
+    vocabulary: [
+      { character: "桌子", pinyin: "zhuōzi", meaning: "Cái bàn", example: "桌子上有本书。", exampleTranslation: "Trên bàn có một cuốn sách.", level: "HSK 1" },
+      { character: "椅子", pinyin: "yǐzi", meaning: "Cái ghế", example: "请坐在这把椅子上。", exampleTranslation: "Hãy ngồi trên chiếc ghế này.", level: "HSK 1" },
+      { character: "床", pinyin: "chuáng", meaning: "Cái giường", example: "这张床很舒服。", exampleTranslation: "Chiếc giường này rất thoải mái.", level: "HSK 2" },
+      { character: "空调", pinyin: "kōngtiáo", meaning: "Điều hòa", example: "天热了，开空调吧。", exampleTranslation: "Trời nóng rồi, bật điều hòa đi.", level: "HSK 3" },
+      { character: "冰箱", pinyin: "bīngxiāng", meaning: "Tủ lạnh", example: "冰箱里没有牛奶了。", exampleTranslation: "Trong tủ lạnh hết sữa rồi.", level: "HSK 3" },
+      { character: "洗衣机", pinyin: "xǐyījī", meaning: "Máy giặt", example: "衣服放进洗衣机了。", exampleTranslation: "Quần áo đã cho vào máy giặt rồi.", level: "HSK 3" },
+      { character: "厨房", pinyin: "chúfáng", meaning: "Nhà bếp", example: "妈妈在厨房忙着。", exampleTranslation: "Mẹ đang bận trong bếp.", level: "HSK 3" },
+      { character: "客厅", pinyin: "kètīng", meaning: "Phòng khách", example: "客人在客厅聊天。", exampleTranslation: "Khách đang nói chuyện ở phòng khách.", level: "HSK 4" },
+    ],
+    grammar: [
+      {
+        rule: "Lượng từ cho đồ vật trong nhà",
+        description: "'张' (zhāng) dùng cho giường/bàn, '把' (bǎ) dùng cho ghế.",
+        examples: [
+          { chinese: "一张床", pinyin: "yī zhāng chuáng", translation: "Một chiếc giường" },
+          { chinese: "两把椅子", pinyin: "liǎng bǎ yǐzi", translation: "Hai chiếc ghế" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "plants-flowers",
+    title: "Thực vật & Hoa cỏ",
+    description: "Vẻ đẹp của thiên nhiên",
+    icon: "Flower",
+    level: "HSK 3-4",
+    radicals: [
+      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (cỏ/thực vật)" },
+      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (cây cối)" },
+    ],
+    vocabulary: [
+      { character: "花", pinyin: "huā", meaning: "Hoa", example: "这些花真漂亮。", exampleTranslation: "Những bông hoa này thật đẹp.", level: "HSK 2" },
+      { character: "草", pinyin: "cǎo", meaning: "Cỏ", example: "不要踩草地。", exampleTranslation: "Đừng dẫm lên cỏ.", level: "HSK 3" },
+      { character: "树", pinyin: "shù", meaning: "Cây", example: "院子里有一棵大树。", exampleTranslation: "Trong sân có một cái cây lớn.", level: "HSK 2" },
+      { character: "玫瑰", pinyin: "méigui", meaning: "Hoa hồng", example: "他送给我一束玫瑰。", exampleTranslation: "Anh ấy tặng tôi một bó hoa hồng.", level: "HSK 4" },
+      { character: "叶子", pinyin: "yèzi", meaning: "Lá cây", example: "秋天叶子变黄了。", exampleTranslation: "Mùa thu lá cây chuyển sang màu vàng.", level: "HSK 3" },
+      { character: "森林", pinyin: "sēnlín", meaning: "Rừng", example: "森林里空气很清新。", exampleTranslation: "Không khí trong rừng rất trong lành.", level: "HSK 4" },
+      { character: "新鲜", pinyin: "xīnxiān", meaning: "Tươi mới", example: "这些花很新鲜。", exampleTranslation: "Những bông hoa này rất tươi.", level: "HSK 3" },
+      { character: "植物", pinyin: "zhíwù", meaning: "Thực vật", example: "多养植物对健康有好处。", exampleTranslation: "Trồng nhiều thực vật có lợi cho sức khỏe.", level: "HSK 4" },
+    ],
+    grammar: [
+      {
+        rule: "Lượng từ cho cây cối 'kē'",
+        description: "Dùng '一棵树' (yī kē shù) để đếm cây cối.",
+        examples: [
+          { chinese: "一棵树", pinyin: "yī kē shù", translation: "Một cái cây" },
+          { chinese: "三棵植物", pinyin: "sān kē zhíwù", translation: "Ba cây thực vật" },
         ],
       },
     ],

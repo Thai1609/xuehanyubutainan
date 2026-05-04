@@ -1,25 +1,27 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { CHINESE_DATA, RADICAL_CATEGORIES, Topic, Vocabulary, DialogueLine } from '../data/chineseData';
 import { CHINESE_301_TOPICS } from '../data/chinese301Data';
 import { motion, AnimatePresence } from 'motion/react';
+import { BASIC_GRAMMAR_STRUCTURES } from '../data/grammarData';
 import { 
-  MessageCircle, Utensils, Briefcase, Leaf, Smartphone, Users, 
-  ShoppingBag, Clock, Music, Bus, Heart, Stethoscope, 
-  GraduationCap, Grid, Star, Target, Map, Bug, 
-  Palette, Smile, Calendar, Tv, BookOpen, MessageSquare, 
-  ChevronRight, Languages, Book, Type, Search, X, Zap, Bird, Cloud, Volume2, ChevronDown,
-  BrainCircuit, Gamepad2, Layers, CheckCircle2, XCircle
+  ChevronRight, Languages, Book, Type, Search, X, Volume2, ChevronDown,
+  BrainCircuit, Gamepad2, Layers, CheckCircle2, XCircle, FileText, Home, Flower,
+  Grid, Map, MessageSquare, PlayCircle, Smile, ShoppingBag, Utensils, Cloud
 } from 'lucide-react';
 
 import { icons } from '../lib/icons';
 import { cn } from '../lib/utils';
 import TopicCard from './TopicCard';
 import TopicDetail from './TopicDetail';
+import WordDetail, { WordItem } from './WordDetail';
 import StrokeWriter from './StrokeWriter';
 import { FlashcardsView } from './FlashcardsView';
 import { QuizView } from './QuizView';
+import { SentenceOrderingView } from './SentenceOrderingView';
 import { ScrollableTabContainer } from './ScrollableTabContainer';
-import { ChevronLeft } from 'lucide-react';
+import { CompoundWordsView } from './CompoundWordsView';
+import { BeginnerRoadmapView } from './BeginnerRoadmapView';
+import { PinyinPronunciationView } from './PinyinPronunciationView';
 
 
 function normalizeText(text: string): string {
@@ -33,8 +35,62 @@ export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState<string | null>(null);
   const [voiceGender, setVoiceGender] = useState<'female'|'male'>('female');
 
-  const [mainTab, setMainTab] = useState<'vocab' | 'roadmap' | 'radicals' | 'practice'>('vocab');
+  const [mainTab, setMainTab] = useState<'vocab' | 'roadmap' | 'pinyin' | 'radicals' | 'grammar' | 'practice' | 'sentences' | 'word-match'>('roadmap');
   const [practiceMode, setPracticeMode] = useState<'flashcards' | 'quiz' | null>(null);
+const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
+  const [expandedGrammarId, setExpandedGrammarId] = useState<string | null>(null);
+
+  const siblingWords = useMemo(() => {
+    if (!selectedWord) return [];
+    
+    if (selectedWord.topicId === 'radicals') {
+      const category = RADICAL_CATEGORIES.find(cat => 
+        cat.radicals.some(r => r.character === selectedWord.character)
+      );
+      if (category) {
+        return category.radicals.map(r => ({
+          id: `radical-${r.character}`,
+          character: r.character,
+          pinyin: r.pinyin,
+          meaning: r.meaning,
+          mnemonic: r.mnemonic,
+          variants: r.variants,
+          type: 'radical',
+          topicId: 'radicals',
+          topicTitle: `Bộ Thủ - ${category.name}`
+        } as WordItem));
+      }
+      return [];
+    } else {
+      const topic = [...CHINESE_DATA, ...CHINESE_301_TOPICS].find(t => t.id === selectedWord.topicId);
+      if (topic && topic.radicals) {
+        return topic.radicals.map(r => ({
+           id: `radical-${r.character}`,
+           character: r.character,
+           pinyin: r.pinyin,
+           meaning: r.meaning,
+           mnemonic: r.mnemonic,
+           variants: r.variants,
+           type: 'radical',
+           topicId: topic.id,
+           topicTitle: topic.title
+        } as WordItem));
+      }
+    }
+    return [];
+  }, [selectedWord]);
+
+  const currentWordIndex = selectedWord ? siblingWords.findIndex(w => w.character === selectedWord.character) : -1;
+  const nextWord = currentWordIndex >= 0 && currentWordIndex < siblingWords.length - 1 ? siblingWords[currentWordIndex + 1] : null;
+  const prevWord = currentWordIndex > 0 ? siblingWords[currentWordIndex - 1] : null;
+
+  const handleNextWord = useCallback(() => {
+    if (nextWord) setSelectedWord(nextWord);
+  }, [nextWord]);
+
+  const handlePrevWord = useCallback(() => {
+    if (prevWord) setSelectedWord(prevWord);
+  }, [prevWord]);
 
   const allGlobalVocab = useMemo(() => {
     let vocab: Vocabulary[] = [];
@@ -60,12 +116,9 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedTopic]);
+  }, [selectedTopic, selectedWord]);
 
   const playAudio = (text: string) => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    
     let speakText = text;
     
     // Mapping isolated initials to their standard teaching pronunciations
@@ -91,109 +144,200 @@ export default function Dashboard() {
       speakText = toneMap[text];
     }
     
-    const utterance = new SpeechSynthesisUtterance(speakText);
-    
-    const voices = window.speechSynthesis.getVoices();
-    let preferredVoice;
-    if (voiceGender === 'male') {
-      preferredVoice = voices.find(v => v.lang.includes('zh') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('kangkang') || v.name.toLowerCase().includes('boy')));
-    }
-
-    const fallbackVoice = voices.find(v => v.lang.includes('zh-CN') && v.name.includes('Google')) || 
-                    voices.find(v => v.lang.includes('zh-CN')) ||
-                    voices.find(v => v.lang.includes('zh'));
-    
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-      utterance.pitch = 1.0;
-    } else if (fallbackVoice) {
-      utterance.voice = fallbackVoice;
-      utterance.pitch = voiceGender === 'male' ? 0.5 : 1.0;
-    } else {
-      utterance.pitch = voiceGender === 'male' ? 0.5 : 1.0;
-    }
-
-    utterance.lang = 'zh-CN';
-    utterance.rate = 0.6; // Even slower for initials/tones
-    
     setIsPlaying(text);
-    utterance.onend = () => setIsPlaying(null);
-    utterance.onerror = () => setIsPlaying(null);
-    
-    window.speechSynthesis.speak(utterance);
+
+    // Stop any existing synthesis
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
+    const fallbackToSpeechSynthesis = () => {
+      if (!window.speechSynthesis) {
+        setIsPlaying(null);
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(speakText);
+      const voices = window.speechSynthesis.getVoices();
+      let preferredVoice;
+      if (voiceGender === 'male') {
+        preferredVoice = voices.find(v => v.lang.includes('zh') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('kangkang') || v.name.toLowerCase().includes('boy')));
+      }
+
+      const fallbackVoice = voices.find(v => v.lang.includes('zh-CN') && v.name.includes('Google')) || 
+                      voices.find(v => v.lang.includes('zh-CN')) ||
+                      voices.find(v => v.lang.includes('zh'));
+      
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+        utterance.pitch = 1.0;
+      } else if (fallbackVoice) {
+        utterance.voice = fallbackVoice;
+        utterance.pitch = voiceGender === 'male' ? 0.5 : 1.0;
+      } else {
+        utterance.pitch = voiceGender === 'male' ? 0.5 : 1.0;
+      }
+
+      // Slightly slower for initials and tones if it's mapped, otherwise normal speed
+      utterance.rate = (initialMap[text.toLowerCase()] || toneMap[text]) ? 0.6 : 0.8;
+      utterance.lang = 'zh-CN';
+      
+      utterance.onend = () => setIsPlaying(null);
+      utterance.onerror = () => setIsPlaying(null);
+      
+      window.speechSynthesis.speak(utterance);
+    };
+
+    try {
+      // Use high quality Google Translate TTS
+      const url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=${encodeURIComponent(speakText)}`;
+      const audio = new Audio(url);
+      // Slower playback rate for initials/tones
+      if (initialMap[text.toLowerCase()] || toneMap[text]) {
+        audio.playbackRate = 0.8;
+      }
+      
+      audio.onended = () => setIsPlaying(null);
+      audio.onerror = () => fallbackToSpeechSynthesis();
+      
+      audio.play().catch((err) => {
+        fallbackToSpeechSynthesis();
+      });
+    } catch (e) {
+      fallbackToSpeechSynthesis();
+    }
   };
 
-  if (selectedTopic) {
-    return (
-      <TopicDetail 
-        topic={selectedTopic} 
-        onBack={() => setSelectedTopic(null)} 
-        playAudio={playAudio}
-        isPlaying={isPlaying}
-        voiceGender={voiceGender}
-        setVoiceGender={setVoiceGender}
-      />
-    );
-  }
-
   return (
-    <div className="max-w-7xl mx-auto py-8 sm:py-16 px-4">
-      <div className="mb-12 sm:mb-20 text-center max-w-3xl mx-auto">
-        <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-100 text-orange-700 rounded-full text-[10px] sm:text-xs font-bold mb-4 sm:mb-6 tracking-widest uppercase shadow-sm">Bắt đầu hành trình</div>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4 sm:mb-8 tracking-tighter leading-[1.1] sm:leading-[0.95]">
+    <AnimatePresence mode="wait">
+      {selectedWord ? (
+        <motion.div
+           key="word-detail"
+           initial={{ opacity: 0, x: 20 }}
+           animate={{ opacity: 1, x: 0 }}
+           exit={{ opacity: 0, x: -20 }}
+           transition={{ duration: 0.3 }}
+        >
+          <WordDetail 
+            word={selectedWord} 
+            onBack={() => setSelectedWord(null)} 
+            playAudio={playAudio}
+            isPlaying={isPlaying === selectedWord.character}
+            onNext={nextWord ? handleNextWord : undefined}
+            onPrev={prevWord ? handlePrevWord : undefined}
+          />
+        </motion.div>
+      ) : selectedTopic ? (
+        <motion.div
+          key="topic-detail"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <TopicDetail 
+            topic={selectedTopic} 
+            onBack={() => setSelectedTopic(null)} 
+            onWordClick={setSelectedWord}
+            playAudio={playAudio}
+            isPlaying={isPlaying}
+            voiceGender={voiceGender}
+            setVoiceGender={setVoiceGender}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="dashboard-home"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="max-w-7xl mx-auto py-8 px-4"
+        >
+          <div className="mb-12 text-center max-w-3xl mx-auto">
+        <div className="inline-block px-4 py-1.5 bg-orange-100 text-orange-700 rounded-full text-[10px] font-bold mb-4 tracking-widest uppercase shadow-sm">Bắt đầu hành trình</div>
+        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-[0.95]">
           Làm chủ tiếng Trung <br />
           <span className="text-orange-500">Dễ như ăn bánh.</span>
         </h2>
-        <p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 px-2">
+        <p className="text-gray-500 text-base leading-relaxed mb-8">
           Học từ phát âm cơ bản, bộ thủ cốt lõi đến cấu trúc thực tế. 
           Luyện tập phản xạ cùng AI mỗi ngày.
         </p>
       </div>
 
-      <div className="w-full max-w-full overflow-hidden flex justify-center mb-12">
-        <ScrollableTabContainer className="mb-0" containerClassName="flex bg-gray-100 p-1.5 sm:p-2 rounded-full mx-auto w-fit">
-          <button 
-            onClick={() => setMainTab('vocab')}
-            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'vocab' ? "bg-white text-orange-500 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Từ vựng theo chủ đề
-          </button>
+      <div className="w-full flex justify-center mb-8 px-4">
+        <div className="flex flex-wrap justify-center gap-2 bg-gray-100 p-2 rounded-[2rem] max-w-2xl">
           <button 
             onClick={() => setMainTab('roadmap')}
-            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'roadmap' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'roadmap' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
-            Lộ trình bài học
+            Lộ trình học
+          </button>
+          <button 
+            onClick={() => setMainTab('pinyin')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'pinyin' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Phát âm
           </button>
           <button 
             onClick={() => setMainTab('radicals')}
-            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'radicals' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'radicals' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
             Thư viện Bộ Thủ
           </button>
           <button 
-            onClick={() => setMainTab('practice')}
-            className={cn("px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap", mainTab === 'practice' ? "bg-white text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+            onClick={() => setMainTab('grammar')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'grammar' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
-            Luyện tập
+            Ngữ pháp
           </button>
-        </ScrollableTabContainer>
+          <button 
+            onClick={() => setMainTab('vocab')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'vocab' ? "bg-white text-orange-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Từ vựng chủ đề
+          </button>
+          <button 
+            onClick={() => setMainTab('word-match')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'word-match' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Ghép từ
+          </button>
+          <button 
+            onClick={() => setMainTab('sentences')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'sentences' ? "bg-white text-orange-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Sắp xếp câu
+          </button>
+          <button 
+            onClick={() => setMainTab('practice')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'practice' ? "bg-white text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Ôn tập
+          </button>
+        </div>
       </div>
 
+      {mainTab === 'word-match' && (
+        <section className="mb-24">
+          <CompoundWordsView playAudio={playAudio} />
+        </section>
+      )}
+
       {mainTab === 'vocab' && (
-      <section className="mb-24">
-        <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg">
-              <Languages size={20} className="sm:w-6 sm:h-6" />
+      <section className="mb-16">
+        <div className="flex items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+              <Languages size={20} />
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Danh mục từ mới</h2>
-              <p className="text-gray-500 text-sm sm:text-base">Học từ mới qua các chủ đề giao tiếp thực tế</p>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Danh mục từ mới</h2>
+              <p className="text-sm text-gray-500">Học từ mới qua các chủ đề giao tiếp thực tế</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {CHINESE_DATA.map((topic) => (
             <TopicCard 
               key={topic.id} 
@@ -208,80 +352,157 @@ export default function Dashboard() {
       {/* 3. Learning Roadmap Section */}
       {mainTab === 'roadmap' && (
         <section className="mb-24">
-          <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xl sm:text-2xl">
-                <Map size={20} className="sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Lộ trình học</h2>
-                <p className="text-gray-500 text-sm sm:text-base">Chinh phục 301 mẫu câu đàm thoại tiếng Hoa tinh hoa</p>
-              </div>
+          <BeginnerRoadmapView onNavigate={setMainTab} />
+        </section>
+      )}
+
+      {mainTab === 'pinyin' && (
+        <section className="mb-24">
+          <PinyinPronunciationView />
+        </section>
+      )}
+
+      {mainTab === 'grammar' && (
+        <section className="mb-16">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+              <FileText size={20} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Cấu trúc câu cơ bản</h2>
+              <p className="text-sm text-gray-500">Nắm vững nền tảng ngữ pháp tiếng Trung qua các mẫu câu thông dụng</p>
             </div>
           </div>
+          
+          <div className="flex flex-col gap-4">
+            {BASIC_GRAMMAR_STRUCTURES.map((item) => {
+              const isExpanded = expandedGrammarId === item.id;
+              
+              return (
+                <motion.div 
+                  key={item.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={cn(
+                    "bg-white rounded-3xl border transition-all flex flex-col overflow-hidden",
+                    isExpanded ? "border-indigo-200 shadow-md" : "border-gray-100 shadow-sm hover:border-indigo-100"
+                  )}
+                >
+                  <button 
+                    onClick={() => setExpandedGrammarId(isExpanded ? null : item.id)}
+                    className="w-full text-left flex items-center justify-between p-6 focus:outline-none"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={cn(
+                        "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
+                        isExpanded ? "bg-indigo-500 text-white" : "bg-indigo-50 text-indigo-500"
+                      )}>
+                        <FileText size={18} />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                          {item.title}
+                        </h3>
+                        <span className="text-xs font-bold text-indigo-500 tracking-widest uppercase mt-1 inline-block">
+                          {item.structure}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronDown 
+                      size={20} 
+                      className={cn("text-gray-400 transition-transform duration-300", isExpanded && "rotate-180")} 
+                    />
+                  </button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {[
-          { title: '301 Đàm thoại', level: 'Mới bắt đầu', color: 'bg-blue-500', shadow: 'shadow-blue-50', desc: 'Gom nhóm 10 bài đầu tiên với đầy đủ hội thoại và từ vựng.', vocab: 300, topicId: '301-full' },
-         ].map((item, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -8, scale: 1.02 }}
-                onClick={() => {
-                  const topic = [...CHINESE_301_TOPICS, ...CHINESE_DATA].find(t => t.id === item.topicId);
-                  if (topic) setSelectedTopic(topic);
-                }}
-                className={cn(
-                  "p-8 rounded-[48px] bg-white border border-gray-100 shadow-xl transition-all relative overflow-hidden group cursor-pointer",
-                  item.shadow
-                )}
-              >
-                <div className={cn("absolute top-0 right-0 w-32 h-32 opacity-10 -mr-16 -mt-16 rounded-full transition-transform group-hover:scale-150", item.color)}></div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className={cn("px-4 py-1 rounded-full text-white text-[10px] font-bold tracking-widest uppercase", item.color)}>
-                    {item.level}
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-sm mb-6 leading-relaxed">{item.desc}</p>
-                <div className="flex items-center justify-between">
-                  <div className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{item.vocab} Từ vựng</div>
-                  <div className={cn("w-10 h-10 rounded-2xl flex items-center justify-center transition-all", item.color)}>
-                    <ChevronRight size={20} className="text-white" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="px-6 pb-6 mt-2 border-t border-gray-50 pt-6">
+                          <p className="text-gray-600 leading-relaxed italic mb-6">
+                            {item.explanation}
+                          </p>
+                          
+                          <div className="space-y-3">
+                            <div className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Ví dụ minh họa:</div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {item.examples.map((ex, i) => (
+                                <div key={i} className="flex items-center justify-between p-4 bg-gray-50/70 rounded-2xl border border-gray-100/50 hover:bg-indigo-50/30 hover:border-indigo-100/50 transition-colors group">
+                                  <div>
+                                    <div className="text-lg font-bold text-gray-900 mb-1">{ex.chinese}</div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-mono text-indigo-500">{ex.pinyin}</span>
+                                      <span className="text-xs text-gray-500 font-medium line-clamp-1">{ex.translation}</span>
+                                    </div>
+                                  </div>
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      playAudio(ex.chinese);
+                                    }}
+                                    className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-white transition-all shadow-sm flex-shrink-0"
+                                  >
+                                    <Volume2 size={16} className={isPlaying === ex.chinese ? "animate-pulse text-indigo-600" : ""} />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </div>
         </section>
       )}
 
       {mainTab === 'radicals' && (
-        <section className="mb-24">
-          <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg text-xl sm:text-2xl">
-              <Grid size={20} className="sm:w-6 sm:h-6" />
+        <section className="mb-16">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center shadow-lg text-2xl">
+              <Grid size={20} />
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Thư viện Bộ Thủ</h2>
-              <p className="text-gray-500 text-sm sm:text-base">Gốc rễ của chữ Hán, chia theo nhóm ý nghĩa sinh động</p>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Thư viện Bộ Thủ</h2>
+              <p className="text-sm text-gray-500">Gốc rễ của chữ Hán, chia theo nhóm ý nghĩa sinh động</p>
             </div>
           </div>
           
-          <div className="space-y-8 sm:space-y-12">
+          <div className="space-y-8">
             {RADICAL_CATEGORIES.map((cat) => {
               const Icon = icons[cat.icon] || Grid;
               return (
-                <div key={cat.id} className="bg-white p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-gray-100 shadow-sm">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="p-3 bg-gray-50 text-gray-600 rounded-2xl">
-                      <Icon size={24} />
+                <div key={cat.id} className="bg-white p-6 md:p-8 rounded-[32px] border border-gray-100 shadow-sm">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-gray-50 text-gray-600 rounded-xl">
+                      <Icon size={20} />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800">{cat.name}</h3>
+                    <h3 className="text-xl font-bold text-gray-800">{cat.name}</h3>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
                     {cat.radicals.map((r, i) => (
-                      <div key={i} className="flex flex-col items-center group">
+                      <div 
+                        key={i} 
+                        onClick={() => setSelectedWord({
+                          id: `radical-${r.character}`,
+                          character: r.character,
+                          pinyin: r.pinyin,
+                          meaning: r.meaning,
+                          mnemonic: r.mnemonic,
+                          variants: r.variants,
+                          type: 'radical',
+                          topicId: 'radicals',
+                          topicTitle: `Bộ Thủ - ${cat.name}`
+                        } as any)}
+                        className="flex flex-col items-center group cursor-pointer"
+                      >
                         <div className="mb-3">
                           <StrokeWriter 
                             character={r.character} 
@@ -290,7 +511,7 @@ export default function Dashboard() {
                           />
                         </div>
                         <div className="text-[10px] font-mono text-gray-400 mb-1">{r.pinyin}</div>
-                        <div className="text-xs font-bold text-gray-700 text-center line-clamp-1">{r.meaning.split(' (')[0]}</div>
+                        <div className="text-xs font-bold text-gray-700 text-center line-clamp-2 min-h-[2.5rem]">{r.meaning}</div>
                       </div>
                     ))}
                   </div>
@@ -301,41 +522,56 @@ export default function Dashboard() {
         </section>
       )}
 
+      {mainTab === 'sentences' && (
+        <section className="mb-16">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-10 h-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+              <Type size={20} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Thử thách Sắp xếp câu</h2>
+              <p className="text-sm text-gray-500">Rèn luyện ngữ pháp và tư duy tiếng Trung qua các bài tập HSK</p>
+            </div>
+          </div>
+          <SentenceOrderingView onBack={() => setMainTab('vocab')} />
+        </section>
+      )}
+
       {mainTab === 'practice' && (
-        <section className="mb-24 flex flex-col items-center justify-center py-8 sm:py-12">
+        <section className="mb-16 flex flex-col items-center justify-center py-8">
           {!practiceMode ? (
             <>
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-purple-100 text-purple-600 rounded-3xl sm:rounded-[32px] flex items-center justify-center mb-6 sm:mb-8 shadow-inner">
-                 <Gamepad2 size={32} className="sm:w-10 sm:h-10" />
+              <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-[24px] flex items-center justify-center mb-6 shadow-inner">
+                 <Gamepad2 size={32} />
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center px-4">Đấu trường Luyện tập</h2>
-              <p className="text-gray-500 text-center max-w-lg mb-8 sm:mb-12 px-4 text-sm sm:text-base">
+              <h2 className="text-3xl font-black text-gray-900 mb-2 text-center">Đấu trường Luyện tập</h2>
+              <p className="text-sm text-gray-500 text-center max-w-lg mb-8">
                 Ôn luyện toàn bộ từ vựng đã học qua hệ thống Flashcard kết hợp thuật toán lặp lại ngắt quãng (Spaced Repetition) và các bài Trắc nghiệm ngẫu nhiên.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl px-4 sm:px-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
                  <div 
                    onClick={() => setPracticeMode('flashcards')}
-                   className="bg-gradient-to-br from-pink-50 to-rose-50 p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-pink-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
-                     <div className="absolute top-6 right-6 sm:top-8 sm:right-8 text-pink-200 group-hover:scale-150 transition-transform">
-                       <Layers size={60} className="sm:w-20 sm:h-20" />
+                   className="bg-gradient-to-br from-pink-50 to-rose-50 p-8 rounded-[40px] border border-pink-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
+                     <div className="absolute top-6 right-6 text-pink-200 group-hover:scale-110 transition-transform">
+                       <Layers size={60} />
                      </div>
-                     <h3 className="text-xl sm:text-2xl font-bold text-pink-900 mb-2 relative z-10 w-[70%] sm:w-auto">Thẻ ghi nhớ tổng hợp</h3>
-                     <p className="text-pink-700 opacity-80 mb-6 sm:mb-8 relative z-10 text-sm sm:text-base w-[80%] sm:w-auto">Lượt qua ngẫu nhiên các từ vựng từ mọi chủ đề.</p>
-                     <div className="inline-flex bg-white text-pink-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-pink-600 group-hover:text-white transition-colors text-sm sm:text-base">
+                     <h3 className="text-xl font-bold text-pink-900 mb-2 relative z-10">Thẻ ghi nhớ tổng hợp</h3>
+                     <p className="text-sm text-pink-700 opacity-80 mb-6 relative z-10">Lượt qua ngẫu nhiên các từ vựng từ mọi chủ đề.</p>
+                     <div className="inline-flex bg-white text-pink-600 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm relative z-10 group-hover:bg-pink-600 group-hover:text-white transition-colors">
                          Luyện Flashcard ngay
                      </div>
                  </div>
 
                  <div 
                    onClick={() => setPracticeMode('quiz')}
-                   className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 sm:p-10 rounded-[32px] sm:rounded-[48px] border border-indigo-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
-                     <div className="absolute top-6 right-6 sm:top-8 sm:right-8 text-indigo-200 group-hover:scale-150 transition-transform">
-                       <BrainCircuit size={60} className="sm:w-20 sm:h-20" />
+                   className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-[40px] border border-indigo-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
+                     <div className="absolute top-6 right-6 text-indigo-200 group-hover:scale-110 transition-transform">
+                       <BrainCircuit size={60} />
                      </div>
-                     <h3 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-2 relative z-10 w-[70%] sm:w-auto">Thi trắc nghiệm ngẫu nhiên</h3>
-                     <p className="text-indigo-700 opacity-80 mb-6 sm:mb-8 relative z-10 text-sm sm:text-base w-[80%] sm:w-auto">Kiểm tra nhanh trí nhớ của bạn với 10 câu hỏi ngẫu nhiên từ toàn bộ kho từ vựng.</p>
-                     <div className="inline-flex bg-white text-indigo-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold shadow-sm relative z-10 group-hover:bg-indigo-600 group-hover:text-white transition-colors text-sm sm:text-base">
+                     <h3 className="text-xl font-bold text-indigo-900 mb-2 relative z-10">Thi trắc nghiệm</h3>
+                     <p className="text-sm text-indigo-700 opacity-80 mb-6 relative z-10">Kiểm tra nhanh trí nhớ của bạn với 10 câu hỏi ngẫu nhiên từ toàn bộ kho từ vựng.</p>
+                     <div className="inline-flex bg-white text-indigo-600 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm relative z-10 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                          Bắt đầu thi
                      </div>
                  </div>
@@ -345,9 +581,9 @@ export default function Dashboard() {
             <div className="w-full max-w-4xl relative">
               <button 
                 onClick={() => setPracticeMode(null)}
-                className="absolute -top-16 left-0 px-6 py-2 rounded-full bg-white border border-gray-100 text-sm font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 w-fit transition-colors shadow-sm"
+                className="absolute -top-12 left-0 px-4 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 w-fit transition-colors shadow-sm"
               >
-                <ChevronRight size={16} className="rotate-180" />
+                <ChevronRight size={14} className="rotate-180" />
                 Quay lại Đấu trường
               </button>
               
@@ -362,7 +598,8 @@ export default function Dashboard() {
         </section>
       )}
 
-    </div>
-
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

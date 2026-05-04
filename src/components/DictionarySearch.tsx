@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Volume2, BookOpen, Layers, Globe, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { dictionaryData, DictionaryEntry } from '../data/dictionaryData';
-import { cn, searchDictionary } from '../lib/utils';
+import { cn } from '../lib/utils';
 import StrokeWriter from './StrokeWriter';
 
 interface DictionarySearchProps {
@@ -20,8 +20,20 @@ export const DictionarySearch: React.FC<DictionarySearchProps> = () => {
 
   useEffect(() => {
     if (query.trim()) {
-      const filtered = searchDictionary(query, dictionaryData);
-      setResults(filtered.slice(0, 50)); // Limit to 50 results to prevent UI lag
+      const lowerQuery = query.toLowerCase();
+      // Remove tones from query just in case user types them, though usually they don't
+      const normalizedQuery = lowerQuery.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+
+      const filtered = dictionaryData.filter(entry => {
+        const normalizedPinyin = entry.pinyin.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+        
+        return entry.word.includes(query) || 
+               (entry.traditional && entry.traditional.includes(query)) ||
+               entry.pinyin.toLowerCase().includes(lowerQuery) || // Keep exact match with tones
+               normalizedPinyin.includes(normalizedQuery) ||      // Match without tones and without spaces
+               entry.meaning.toLowerCase().includes(lowerQuery);
+      });
+      setResults(filtered); // Find all results
       setIsOpen(true);
     } else {
       setResults([]);

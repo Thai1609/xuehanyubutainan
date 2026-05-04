@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, User, Bot, Loader2, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { askAI } from '../services/gemini';
+import { askAIStream } from '../services/ai';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -19,6 +19,7 @@ export default function AIChatPanel({ isOpen, onClose, initialContext }: AIChatP
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function AIChatPanel({ isOpen, onClose, initialContext }: AIChatP
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, streamingMessage]);
 
   const handleSend = async (text: string = input) => {
     if (!text.trim() || isLoading) return;
@@ -40,12 +41,23 @@ export default function AIChatPanel({ isOpen, onClose, initialContext }: AIChatP
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    setStreamingMessage('');
 
-    const result = await askAI(text);
-    const botMessage: Message = { role: 'assistant', content: result };
-    setMessages(prev => [...prev, botMessage]);
+    try {
+      const fullResponse = await askAIStream(text, undefined, (chunk) => {
+        setStreamingMessage(chunk);
+      });
+      const botMessage: Message = { role: 'assistant', content: fullResponse };
+      setMessages(prev => [...prev, botMessage]);
+    } catch (e) {
+      const botMessage: Message = { role: 'assistant', content: "Có lỗi xảy ra thiết lập kết nối AI. Vui lòng kiểm tra API Key." };
+      setMessages(prev => [...prev, botMessage]);
+    }
+
+    setStreamingMessage('');
     setIsLoading(false);
   };
+
 
   return (
     <AnimatePresence>
@@ -117,15 +129,23 @@ export default function AIChatPanel({ isOpen, onClose, initialContext }: AIChatP
                   </div>
                 </div>
               ))}
-              {isLoading && (
+              {(isLoading || streamingMessage) && (
                 <div className="flex justify-start">
-                  <div className="flex gap-4 items-center text-slate-400">
-                    <div className="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center text-slate-950 font-bold text-[10px]">
+                  <div className="flex gap-4 items-center max-w-[90%] flex-row">
+                    <div className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-slate-950 font-bold text-[10px] bg-teal-500 self-start">
                       AI
                     </div>
-                    <div className="flex items-center gap-3 px-6 py-4 bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none">
-                      <Loader2 className="animate-spin text-teal-500" size={16} />
-                      <span className="text-xs font-bold uppercase tracking-widest text-teal-500/60">AI đang xử lý...</span>
+                    <div className="p-5 bg-slate-900 text-slate-300 rounded-2xl rounded-tl-none border border-slate-800 flex flex-col gap-2 min-w-[120px]">
+                      {streamingMessage ? (
+                         <div className="markdown-body prose prose-invert prose-sm max-w-none">
+                            <ReactMarkdown>{streamingMessage}</ReactMarkdown>
+                         </div>
+                      ) : (
+                         <div className="flex items-center gap-3">
+                           <Loader2 className="animate-spin text-teal-500" size={16} />
+                           <span className="text-xs font-bold uppercase tracking-widest text-teal-500/60">AI đang xử lý...</span>
+                         </div>
+                      )}
                     </div>
                   </div>
                 </div>

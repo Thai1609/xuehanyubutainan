@@ -6,19 +6,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { BookMarked, MessageSquare, Menu, X, Sparkles, Search, ArrowUp } from 'lucide-react';
 import { cn } from './lib/utils';
 
-const AppLogo = ({ className = "" }: { className?: string }) => (
-  <div className={cn("relative flex items-center justify-center shrink-0 w-11 h-11 bg-gradient-to-br from-orange-400 to-orange-600 rounded-[14px] shadow-lg shadow-orange-500/30 text-white overflow-hidden group border border-orange-300/30", className)}>
-    {/* Abstract Book / Decorative background */}
-    <div className="absolute inset-x-2 bottom-2 h-4 border-2 border-white/20 rounded-md border-t-0 border-b-white/40"></div>
-    <div className="absolute bottom-2 w-0.5 h-3 bg-white/30"></div>
-    
-    {/* Top highlight for 3D effect */}
-    <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent"></div>
-    
-    <span className="relative z-10 font-serif font-bold text-[22px] drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] transform -translate-y-0.5 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">学</span>
-  </div>
-);
-
 export default function App() {
   const [activeView, setActiveView] = useState<'lessons' | 'practice'>('lessons');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -49,9 +36,11 @@ export default function App() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-orange-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { setActiveView('lessons'); window.scrollTo(0, 0); }}>
-            <AppLogo />
-            <span className="font-extrabold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-orange-400">xuehanyubutainan</span>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-orange-100">
+              汉
+            </div>
+            <span className="font-bold text-2xl tracking-tighter text-orange-600">Hanyubutainan</span>
           </div>
 
           {/* Desktop Nav */}
@@ -119,7 +108,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className={cn("pt-24", activeView === 'practice' ? "pb-0 h-[100svh] overflow-hidden" : "pb-20")}>
+      <main className="pt-24 pb-20">
         <AnimatePresence mode="wait">
           {activeView === 'lessons' ? (
             <motion.div
@@ -137,8 +126,13 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
-              className="max-w-4xl mx-auto px-2 sm:px-4 py-2 sm:py-4 h-[calc(100svh-100px)] flex flex-col"
+              className="max-w-4xl mx-auto px-4 py-8"
             >
+              <div className="mb-12 text-center">
+                <div className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-bold mb-4 uppercase tracking-widest">Giao tiếp thông minh</div>
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">Luyện tập cùng Xiao Ai</h1>
+                <p className="text-gray-500 max-w-xl mx-auto">Nói chuyện, sửa lỗi ngữ pháp và học cách phát âm pinyin chuẩn xác với giáo viên AI của riêng bạn.</p>
+              </div>
               <AIAssistant />
             </motion.div>
           )}
@@ -146,19 +140,17 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      {activeView !== 'practice' && (
-        <footer className="border-t border-orange-100 py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer" onClick={() => { setActiveView('lessons'); window.scrollTo(0, 0); }}>
-              <AppLogo className="w-10 h-10" />
-              <span className="font-extrabold text-xl tracking-tight text-gray-800">xuehanyubutainan</span>
-            </div>
-            <div className="text-sm font-medium text-gray-400">
-              © 2026 xuehanyubutainan. Designed for Learners.
-            </div>
+      <footer className="border-t border-orange-100 py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">汉</div>
+            <span className="font-bold text-lg tracking-tight text-orange-600">Hanyubutainan</span>
           </div>
-        </footer>
-      )}
+          <div className="text-sm font-medium text-gray-400">
+            © 2026 Hanyubutainan. Designed for Learners.
+          </div>
+        </div>
+      </footer>
 
       {/* Scroll to Top Button */}
       <AnimatePresence>

@@ -15,18 +15,14 @@ interface StrokeWriterProps {
   radicalColor?: string;
 }
 
-const isChineseChar = (char: string) => /[\u4e00-\u9fa5]/.test(char);
-
 function SingleCharWriter({ char, size, padding, strokeColor, radicalColor, idx, currentWritersRef }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if (!containerRef.current) return;
-    
-    if (!isChineseChar(char)) return;
-
     containerRef.current.innerHTML = '';
     
+    // HanziWriter might fail for non-chinese chars like punctuation
     try {
       const writer = HanziWriter.create(containerRef.current, char, {
         width: size,
@@ -39,6 +35,7 @@ function SingleCharWriter({ char, size, padding, strokeColor, radicalColor, idx,
         strokeAnimationSpeed: 2,
       });
       currentWritersRef.current[idx] = writer;
+      // Animate immediately (simultaneously)
       writer.animateCharacter();
     } catch(e) {
       console.warn("Could not draw character with HanziWriter:", char, e);
@@ -50,10 +47,6 @@ function SingleCharWriter({ char, size, padding, strokeColor, radicalColor, idx,
        }
     };
   }, [char, size, padding, strokeColor, radicalColor, idx, currentWritersRef]);
-  
-  if (!isChineseChar(char)) {
-    return <span style={{ fontSize: size * 0.8, lineHeight: `${size}px`, display: 'inline-block', color: strokeColor }} className="font-bold">{char}</span>;
-  }
   
   return <div ref={containerRef} />;
 }

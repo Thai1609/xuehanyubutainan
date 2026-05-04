@@ -20,6 +20,7 @@
     "hanzi-writer": "^3.7.3",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "openai": "^6.35.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
