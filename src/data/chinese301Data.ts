@@ -5617,10 +5617,21 @@ export const CHINESE_301_TOPICS: Topic[] = [
           {
             character: "别",
             pinyin: "bié",
-            meaning: "đừng",
+            meaning: "đừng / biệt",
             example: "别客气。",
             examplePinyin: "Bié kèqi.",
             exampleTranslation: "Đừng khách sáo.",
+            components: [
+              "KHẨU 口: cái miệng, lời nói",
+              "LỰC 力: sức lực",
+              "ĐAO 刂: con dao"
+            ],
+            mnemonic: "Lời nói 口 tiêu cực có sức 力 sát thương như một nhát dao 刂 khiến chúng ta BIỆT 别 ly.",
+            customExamples: [
+              "Đặc biệt: 特别/tèbié/",
+              "Phân biệt: 分别/fēnbié/",
+              "Biệt xứ: 别处/biéchù/"
+            ]
           },
           {
             character: "客气",

@@ -385,7 +385,23 @@ export default function TopicDetail({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
                         key={i} 
-                        className="bg-white p-6 rounded-[32px] border-b-2 border-orange-100 shadow-sm group hover:border-orange-300 transition-all relative overflow-hidden"
+                        onClick={() => onWordClick({
+                          id: v.id || `vocab-${v.character}`,
+                          character: v.character,
+                          pinyin: v.pinyin,
+                          meaning: v.meaning,
+                          example: v.example,
+                          examplePinyin: v.examplePinyin,
+                          exampleTranslation: v.exampleTranslation,
+                          mnemonic: v.mnemonic,
+                          customExamples: v.customExamples,
+                          components: v.components,
+                          type: 'vocab',
+                          topicId: topic.id,
+                          topicTitle: topic.title,
+                          lessonId: currentLesson?.id
+                        } as any)}
+                        className="bg-white p-6 rounded-[32px] border-b-2 border-orange-100 shadow-sm group hover:border-orange-300 transition-all relative overflow-hidden cursor-pointer"
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-4">

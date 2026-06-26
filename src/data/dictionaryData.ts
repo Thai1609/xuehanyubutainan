@@ -6444,5 +6444,80 @@ export const dictionaryData: DictionaryEntry[] = [
   { id: "dict_cw_122", word: "想念", pinyin: "xiǎngniàn", meaning: "nhớ nhung", examples: [] },
   { id: "dict_cw_123", word: "相信", pinyin: "xiāngxìn", meaning: "tin tưởng", examples: [] },
   { id: "dict_cw_124", word: "向前", pinyin: "xiàngqián", meaning: "hướng về phía trước", examples: [] },
-  { id: "dict_cw_125", word: "向下", pinyin: "xiàngxià", meaning: "hướng xuống", examples: [] }
+  { id: "dict_cw_125", word: "向下", pinyin: "xiàngxià", meaning: "hướng xuống", examples: [] },
+  { id: "dict_cw_126", word: "人工智能", pinyin: "réngōng zhìnéng", meaning: "Trí tuệ nhân tạo (AI)", examples: [
+    { chinese: "人工智能正在改变我们的世界。", pinyin: "Réngōng zhìnéng zhèngzài gǎibiàn wǒmen de ...", translation: "Trí tuệ nhân tạo đang thay đổi thế giới của chúng ta." }
+  ] },
+  { id: "dict_cw_127", word: "面子", pinyin: "miànzi", meaning: "Thể diện, sĩ diện, bộ mặt", examples: [
+    { chinese: "中国人很看重面子。", pinyin: "Zhōngguórén hěn kànzhòng miànzi.", translation: "Người Trung Quốc rất coi trọng thể diện." }
+  ] },
+  { id: "dict_cw_128", word: "微信", pinyin: "wēixìn", meaning: "Ứng dụng nhắn tin WeChat", examples: [
+    { chinese: "你可以加我的微信吗？", pinyin: "Nǐ kěyǐ jiā wǒ de wēixìn ma?", translation: "Bạn có thể kết bạn WeChat với tôi không?" }
+  ] },
+  { id: "dict_cw_129", word: "扫码", pinyin: "sǎo mǎ", meaning: "Quét mã (QR, thanh toán...)", examples: [
+    { chinese: "请扫码付款。", pinyin: "Qǐng sǎo mǎ fùkuǎn.", translation: "Vui lòng quét mã để thanh toán." }
+  ] },
+  { id: "dict_cw_130", word: "外卖", pinyin: "wàimài", meaning: "Đồ ăn giao tận nơi, thức ăn mang đi (takeaway)", examples: [
+    { chinese: "我 hôm nay不想做饭，点外卖吧。", pinyin: "Wǒ jīntiān bù xiǎng zuòfàn, diǎn wàimài ba.", translation: "Hôm nay tôi không muốn nấu cơm, gọi đồ ăn ngoài đi." }
+  ] },
+  { id: "dict_cw_131", word: "快递", pinyin: "kuàidì", meaning: "Chuyển phát nhanh, kiện hàng chuyển phát", examples: [
+    { chinese: "你的快递到了，请去拿一下。", pinyin: "Nǐ de kuàidì dào le, qǐng qù ná yíxià.", translation: "Kiện hàng chuyển phát nhanh của bạn đến rồi, vui lòng đi lấy nhé." }
+  ] },
+  { id: "dict_cw_132", word: "加班", pinyin: "jiā bān", meaning: "Tăng ca, làm thêm giờ", examples: [
+    { chinese: "今天我要加班，会晚点回家。", pinyin: "Jīntiān wǒ yào jiābān, huì wǎndiǎn huí jiā.", translation: "Hôm nay tôi phải tăng ca, sẽ về nhà muộn một chút." }
+  ] },
+  { id: "dict_cw_133", word: "网红", pinyin: "wǎnghóng", meaning: "Người nổi tiếng trên mạng, hot blogger", examples: [
+    { chinese: "这家餐厅是最近很火的网红店。", pinyin: "Zhè jiā cāntīng shì zuìjìn hěn huǒ de wǎnghóng diàn.", translation: "Nhà hàng này là một cửa hàng nổi tiếng trên mạng rất hot gần đây." }
+  ] },
+  { id: "dict_cw_134", word: "点赞", pinyin: "diǎn zàn", meaning: "Bấm thích, like, thả tim (mạng xã hội)", examples: [
+    { chinese: "如果你喜欢这个视频，请帮我点赞！", pinyin: "Rúguǒ nǐ xǐhuan zhè ge shìpín, qǐng bāng wǒ diǎnzàn!", translation: "Nếu bạn thích video này, hãy giúp tôi bấm like nhé!" }
+  ] },
+  { id: "dict_cw_135", word: "粉丝", pinyin: "fěnsī", meaning: "Người hâm mộ, fan, miến (món ăn)", examples: [
+    { chinese: "他的社交账号有十万个粉丝。", pinyin: "Tā de shèjiāo zhànghào yǒu shíwàn gè fěnsī.", translation: "Tài khoản mạng xã hội của anh ấy có 100 ngàn người hâm mộ." }
+  ] },
+  { id: "dict_cw_136", word: "刷视频", pinyin: "shuā shìpín", meaning: "Lướt video ngắn", examples: [
+    { chinese: "他每天睡觉前都喜欢刷视频。", pinyin: "Tā měitiān shuìjiào qián dōu xǐhuan shuā shìpín.", translation: "Anh ấy thích lướt xem video ngắn mỗi tối trước khi ngủ." }
+  ] },
+  { id: "dict_cw_137", word: "支付宝", pinyin: "zhīfùbǎo", meaning: "Ví điện tử Alipay", examples: [
+    { chinese: "在中国，你可以用支付宝付钱。", pinyin: "Zài Zhōngguó, nǐ kěyǐ yòng Zhīfùbǎo fù qián.", translation: "Ở Trung Quốc, bạn có thể thanh toán bằng Alipay." }
+  ] },
+  { id: "dict_cw_138", word: "打车", pinyin: "dǎchē", meaning: "Bắt taxi, gọi xe chạy dịch vụ", examples: [
+    { chinese: "外面下大雨，我们打车回去吧。", pinyin: "Wàimiàn xià dàyǔ, wǒmen dǎchē huíqù ba.", translation: "Ngoài trời mưa to quá, chúng ta bắt taxi về đi." }
+  ] },
+  { id: "dict_cw_139", word: "自拍", pinyin: "zìpāi", meaning: "Chụp ảnh tự sướng, selfie", examples: [
+    { chinese: "我们一起来拍张自拍吧！", pinyin: "Wǒmen yìqǐ lai pāi zhāng zìpāi ba!", translation: "Chúng ta cùng chụp một tấm hình tự sướng đi!" }
+  ] },
+  { id: "dict_cw_140", word: "充电宝", pinyin: "chōngdiànbǎo", meaning: "Pin sạc dự phòng", examples: [
+    { chinese: "我的手机快没电了, 你有充电宝吗？", pinyin: "Wǒ de shǒujī kuài méi diàn le, nǐ yǒu chōngdiànbǎo ma?", translation: "Điện thoại tôi sắp hết pin rồi, bạn có cục sạc dự phòng không?" }
+  ] },
+  { id: "dict_cw_141", word: "无线网络", pinyin: "wúxiàn wǎngluò", meaning: "Mạng không dây, WiFi", examples: [
+    { chinese: "这儿的无线网络密码是多少？", pinyin: "Zhè'r de wúxiàn wǎngluò mìmǎ shì duōshao?", translation: "Mật khẩu WiFi ở đây là bao nhiêu vậy?" }
+  ] },
+  { id: "dict_cw_142", word: "焦虑", pinyin: "jiāolǜ", meaning: "Lo lắng, lo âu, stress", examples: [
+    { chinese: "要考试了，他心里感到有些焦虑。", pinyin: "Yào kǎoshì le, tā xīnlǐ gǎndào yǒuxiē jiāolǜ.", translation: "Sắp thi rồi, trong lòng anh ấy cảm thấy hơi lo âu." }
+  ] },
+  { id: "dict_cw_143", word: "给力", pinyin: "gěilì", meaning: "Tuyệt vời, đỉnh, có sức mạnh, giúp ích nhiều", examples: [
+    { chinese: "你这个办法太给力了！", pinyin: "Nǐ zhège bànfǎ tài gěilì le!", translation: "Cách này của bạn bá đạo/tuyệt vời quá!" }
+  ] },
+  { id: "dict_cw_144", word: "吃货", pinyin: "chīhuò", meaning: "Tâm hồn ăn uống, kẻ sành ăn (foodie)", examples: [
+    { chinese: "作为一个吃货，我最喜欢去夜市吃小吃。", pinyin: "Zuòwéi yígè chīhuò, wǒ zuì xǐhuan qù yèshì chī xiǎochī.", translation: "Là một tâm hồn ăn uống, tôi thích nhất là đi chợ đêm thưởng thức đồ ăn vặt." }
+  ] },
+  { id: "dict_cw_145", word: "学霸", pinyin: "xuébà", meaning: "Học thần, học bá, mọt sách tài ba", examples: [
+    { chinese: "他每天不怎么玩，真是个学霸。", pinyin: "Tā měitiān bù zěnme wán, zhēnshì gè xuébà.", translation: "Anh ấy hầu như không đi chơi, đúng thật là một học bá giỏi giang." }
+  ] },
+  { id: "dict_cw_146", word: "好久不见", pinyin: "hǎojiǔ bújiàn", meaning: "Đã lâu không gặp", examples: [
+    { chinese: "张老师，好久不见，您身体好吗？", pinyin: "Zhāng lǎoshī, hǎojiǔ bújiàn, nín shēntǐ hǎo ma?", translation: "Thầy Trương, đã lâu không gặp, sức khỏe của thầy tốt chứ?" }
+  ] },
+  { id: "dict_cw_147", word: "干嘛", pinyin: "gànmá", meaning: "Làm gì thế, có chuyện gì vậy, làm sao", examples: [
+    { chinese: "你一直看着我干嘛？", pinyin: "Nǐ yìzhí kànzhe wǒ gànmá?", translation: "Bạn cứ nhìn tôi chăm chăm làm gì thế?" }
+  ] },
+  { id: "dict_cw_148", word: "老实", pinyin: "lǎoshi", meaning: "Thật thà, trung thực, ngoan ngoãn", examples: [
+    { chinese: "那个孩子看起来很老实。", pinyin: "Nàge háizi kànqǐlái hěn lǎoshi.", translation: "Đứa bé đó trông rất thật thà ngoan ngoãn." }
+  ] },
+  { id: "dict_cw_149", word: "开心", pinyin: "kāixīn", meaning: "Vui vẻ, hạnh phúc, hân hoan", examples: [
+    { chinese: "今天能见到你，我很开心。", pinyin: "Jīntiān néng jiàndào nǐ, wǒ hěn kāixīn.", translation: "Hôm nay được gặp bạn, tôi rất vui vẻ." }
+  ] },
+  { id: "dict_cw_150", word: "随口", pinyin: "suíkǒu", meaning: "Nói tùy tiện, nói buột miệng, nói trôi chảy", examples: [
+    { chinese: "他只是随口说说，你别放在心上。", pinyin: "Tā zhǐshì suíkǒu shuōshuō, nǐ bié fàng zài xīn shàng.", translation: "Anh ấy chỉ thuận miệng nói đùa thôi, bạn đừng để trong lòng nhé." }
+  ] }
 ];

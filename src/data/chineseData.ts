@@ -5,6 +5,7 @@ export interface Radical {
   mnemonic?: string;
   category?: string;
   variants?: string[];
+  examples?: string[];
 }
 
 export const RADICAL_CATEGORIES = [
@@ -13,13 +14,13 @@ export const RADICAL_CATEGORIES = [
     name: "Người & Quan hệ",
     icon: "Users",
     radicals: [
-      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (Người)", mnemonic: "Hình ảnh một người đang đứng thẳng.", variants: ["人"] },
-      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (Phụ nữ)", mnemonic: "Hình ảnh người phụ nữ đang quỳ gối hoặc bồng con." },
-      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (Con cái)", mnemonic: "Hình ảnh em bé đang quấn tã, tâng vẫy tay chân." },
-      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (Cha)", mnemonic: "Hình ảnh hai bàn tay cầm gậy (biểu tượng quyền lực của cha)." },
-      { character: "老", pinyin: "lǎo", meaning: "Bộ Lão (Người già)", mnemonic: "Hình ảnh người già chống gậy, tóc bạc phơ." },
-      { character: "士", pinyin: "shì", meaning: "Bộ Sĩ (Kẻ sĩ/Người nam)", mnemonic: "Kẻ sĩ đứng thẳng, vai rộng hơn eo." },
-      { character: "儿", pinyin: "ér", meaning: "Bộ Nhi (Trẻ con)", mnemonic: "Hình ảnh đôi chân của đứa trẻ đang chạy nhảy." },
+      { character: "亻", pinyin: "rén", meaning: "Bộ Nhân (Người)", mnemonic: "Hình ảnh một người đang đứng thẳng.", variants: ["人"], examples: ["你 (nǐ) - Bạn", "他 (tā) - Anh ấy"] },
+      { character: "女", pinyin: "nǚ", meaning: "Bộ Nữ (Phụ nữ)", mnemonic: "Hình ảnh người phụ nữ đang quỳ gối hoặc bồng con.", examples: ["妈 (mā) - Mẹ", "她 (tā) - Cô ấy"] },
+      { character: "子", pinyin: "zǐ", meaning: "Bộ Tử (Con cái)", mnemonic: "Hình ảnh em bé đang quấn tã, tâng vẫy tay chân.", examples: ["孩 (hái) - Đứa trẻ", "孙 (sūn) - Cháu"] },
+      { character: "父", pinyin: "fù", meaning: "Bộ Phụ (Cha)", mnemonic: "Hình ảnh hai bàn tay cầm gậy (biểu tượng quyền lực của cha).", examples: ["爸 (bà) - Bố", "爷 (yé) - Ông"] },
+      { character: "老", pinyin: "lǎo", meaning: "Bộ Lão (Người già)", mnemonic: "Hình ảnh người già chống gậy, tóc bạc phơ.", examples: ["考 (kǎo) - Thi", "者 (zhě) - Người"] },
+      { character: "士", pinyin: "shì", meaning: "Bộ Sĩ (Kẻ sĩ/Người nam)", mnemonic: "Kẻ sĩ đứng thẳng, vai rộng hơn eo.", examples: ["吉 (jí) - Tốt lành(cát)", "壮 (zhuàng) - Khỏe mạnh"] },
+      { character: "儿", pinyin: "ér", meaning: "Bộ Nhi (Trẻ con)", mnemonic: "Hình ảnh đôi chân của đứa trẻ đang chạy nhảy.", examples: ["兄 (xiōng) - Anh trai", "元 (yuán) - Đồng bạc"] },
     ]
   },
   {
@@ -27,18 +28,18 @@ export const RADICAL_CATEGORIES = [
     name: "Cơ thể & Giác quan",
     icon: "Heart",
     radicals: [
-      { character: "目", pinyin: "mù", meaning: "Bộ Mục (Mắt)", mnemonic: "Hình ảnh con mắt xoay dọc." },
-      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (Miệng)", mnemonic: "Hình ảnh cái miệng đang há to." },
-      { character: "心", pinyin: "xīn", meaning: "Bộ Tâm (Tim/Tâm hồn)", mnemonic: "Hình ảnh quả tim với các ngăn và mạch máu.", variants: ["忄"] },
-      { character: "耳", pinyin: "ěr", meaning: "Bộ Nhĩ (Tai)", mnemonic: "Mô tả vành tai con người." },
-      { character: "自", pinyin: "zì", meaning: "Bộ Tự (Mũi/Tự mình)", mnemonic: "Hình ảnh cái mũi (người Trung Quốc thường chỉ vào mũi khi nói về mình)." },
-      { character: "舌", pinyin: "shé", meaning: "Bộ Thiệt (Lưỡi)", mnemonic: "Hình ảnh cái lưỡi thè ra từ miệng." },
-      { character: "牙", pinyin: "yá", meaning: "Bộ Nha (Răng)", mnemonic: "Hình ảnh những chiếc răng cửa." },
-      { character: "手", pinyin: "shǒu", meaning: "Bộ Thủ (Tay)", mnemonic: "Hình ảnh bàn tay với các ngón tay." },
-      { character: "足", pinyin: "zú", meaning: "Bộ Túc (Chân)", mnemonic: "Hình ảnh cái chân với đầu gối và bàn chân." },
-      { character: "身", pinyin: "shēn", meaning: "Bộ Thân (Thân thể)", mnemonic: "Hình ảnh người phụ nữ mang bầu (biểu tượng cho thân thể)." },
-      { character: "骨", pinyin: "gǔ", meaning: "Bộ Cốt (Xương)", mnemonic: "Cấu trúc khung xương trong cơ thể." },
-      { character: "肉", pinyin: "ròu", meaning: "Bộ Nhục (Thịt)", mnemonic: "Hình ảnh miếng thịt cắt lát." },
+      { character: "目", pinyin: "mù", meaning: "Bộ Mục (Mắt)", mnemonic: "Hình ảnh con mắt xoay dọc.", examples: ["看 (kàn) - Nhìn", "眼 (yǎn) - Mắt"] },
+      { character: "口", pinyin: "kǒu", meaning: "Bộ Khẩu (Miệng)", mnemonic: "Hình ảnh cái miệng đang há to.", examples: ["吃 (chī) - Ăn", "喝 (hē) - Uống"] },
+      { character: "心", pinyin: "xīn", meaning: "Bộ Tâm (Tim/Tâm hồn)", mnemonic: "Hình ảnh quả tim với các ngăn và mạch máu.", variants: ["忄"], examples: ["想 (xiǎng) - Nhớ, muốn", "恨 (hèn) - Hận"] },
+      { character: "耳", pinyin: "ěr", meaning: "Bộ Nhĩ (Tai)", mnemonic: "Mô tả vành tai con người.", examples: ["聊 (liáo) - Nói chuyện, tán gẫu", "聪 (cōng) - Thông minh"] },
+      { character: "自", pinyin: "zì", meaning: "Bộ Tự (Mũi/Tự mình)", mnemonic: "Hình ảnh cái mũi (người Trung Quốc thường chỉ vào mũi khi nói về mình).", examples: ["息 (xī) - Hơi thở"] },
+      { character: "舌", pinyin: "shé", meaning: "Bộ Thiệt (Lưỡi)", mnemonic: "Hình ảnh cái lưỡi thè ra từ miệng.", examples: ["话 (huà) - Lời nói", "甜 (tián) - Ngọt"] },
+      { character: "牙", pinyin: "yá", meaning: "Bộ Nha (Răng)", mnemonic: "Hình ảnh những chiếc răng cửa.", examples: ["鸦 (yā) - Con quạ"] },
+      { character: "手", pinyin: "shǒu", meaning: "Bộ Thủ (Tay)", mnemonic: "Hình ảnh bàn tay với các ngón tay.", examples: ["拿 (ná) - Cầm, lấy", "打 (dǎ) - Đánh"] },
+      { character: "足", pinyin: "zú", meaning: "Bộ Túc (Chân)", mnemonic: "Hình ảnh cái chân với đầu gối và bàn chân.", examples: ["跑 (pǎo) - Chạy", "踢 (tī) - Đá"] },
+      { character: "身", pinyin: "shēn", meaning: "Bộ Thân (Thân thể)", mnemonic: "Hình ảnh người phụ nữ mang bầu (biểu tượng cho thân thể).", examples: ["射 (shè) - Bắn"] },
+      { character: "骨", pinyin: "gǔ", meaning: "Bộ Cốt (Xương)", mnemonic: "Cấu trúc khung xương trong cơ thể.", examples: ["体 (tǐ) - Thể", "滑 (huá) - Trơn"] },
+      { character: "肉", pinyin: "ròu", meaning: "Bộ Nhục (Thịt)", mnemonic: "Hình ảnh miếng thịt cắt lát.", examples: ["腐 (fǔ) - Thối rữa"] },
     ]
   },
   {
@@ -46,14 +47,14 @@ export const RADICAL_CATEGORIES = [
     name: "Hành động & Di chuyển",
     icon: "Zap",
     radicals: [
-      { character: "辶", pinyin: "chuò", meaning: "Bộ Sước (Đi lại)", mnemonic: "Hình ảnh một người đang bước đi trên đường (biến thể của bộ Sước).", variants: ["辵"] },
-      { character: "扌", pinyin: "shǒu", meaning: "Bộ Thủ (Hành động bằng tay)", mnemonic: "Biến thể của chữ Thủ (Tay), dùng khi tay thực hiện hành động.", variants: ["手"] },
-      { character: "力", pinyin: "lì", meaning: "Bộ Lực (Sức mạnh)", mnemonic: "Hình ảnh cánh tay đang gồng lên hoặc cái cày đẩy dưới đất." },
-      { character: "走", pinyin: "zǒu", meaning: "Bộ Tẩu (Chạy/Đi)", mnemonic: "Hình ảnh một người đang vung tay chạy trên mặt đất." },
-      { character: "攵", pinyin: "pū", meaning: "Bộ Phốc (Đánh nhẹ)", mnemonic: "Hình ảnh bàn tay cầm roi đang quất nhẹ." },
-      { character: "彳", pinyin: "chì", meaning: "Bộ Xích (Bước chân trái)", mnemonic: "Mô tả bước chân ngắn bên trái." },
-      { character: "止", pinyin: "zhǐ", meaning: "Bộ Chỉ (Dừng lại)", mnemonic: "Đồ hình bàn chân dừng lại, không tiếp tục bước đi." },
-      { character: "殳", pinyin: "shū", meaning: "Bộ Thù (Binh khí/Đánh)", mnemonic: "Tay cầm một cây đại đao hoặc binh khí dài." },
+      { character: "辶", pinyin: "chuò", meaning: "Bộ Sước (Đi lại)", mnemonic: "Hình ảnh một người đang bước đi trên đường (biến thể của bộ Sước).", variants: ["辵"], examples: ["这 (zhè) - Đây", "过 (guò) - Qua"] },
+      { character: "扌", pinyin: "shǒu", meaning: "Bộ Thủ (Hành động bằng tay)", mnemonic: "Biến thể của chữ Thủ (Tay), dùng khi tay thực hiện hành động.", variants: ["手"], examples: ["打 (dǎ) - Đánh", "找 (zhǎo) - Tìm"] },
+      { character: "力", pinyin: "lì", meaning: "Bộ Lực (Sức mạnh)", mnemonic: "Hình ảnh cánh tay đang gồng lên hoặc cái cày đẩy dưới đất.", examples: ["动 (dòng) - Động", "加 (jiā) - Thêm"] },
+      { character: "走", pinyin: "zǒu", meaning: "Bộ Tẩu (Chạy/Đi)", mnemonic: "Hình ảnh một người đang vung tay chạy trên mặt đất.", examples: ["起 (qǐ) - Dậy, khởi", "越 (yuè) - Vượt"] },
+      { character: "攵", pinyin: "pū", meaning: "Bộ Phốc (Đánh nhẹ)", mnemonic: "Hình ảnh bàn tay cầm roi đang quất nhẹ.", examples: ["做 (zuò) - Làm", "故 (gù) - Cố"] },
+      { character: "彳", pinyin: "chì", meaning: "Bộ Xích (Bước chân trái)", mnemonic: "Mô tả bước chân ngắn bên trái.", examples: ["很 (hěn) - Rất", "行 (xíng) - Đi, được"] },
+      { character: "止", pinyin: "zhǐ", meaning: "Bộ Chỉ (Dừng lại)", mnemonic: "Đồ hình bàn chân dừng lại, không tiếp tục bước đi.", examples: ["步 (bù) - Bước", "正 (zhèng) - Chính"] },
+      { character: "殳", pinyin: "shū", meaning: "Bộ Thù (Binh khí/Đánh)", mnemonic: "Tay cầm một cây đại đao hoặc binh khí dài.", examples: ["段 (duàn) - Đoạn", "殷 (yīn) - Ân"] },
     ]
   },
   {
@@ -61,15 +62,15 @@ export const RADICAL_CATEGORIES = [
     name: "Động vật",
     icon: "Bird",
     radicals: [
-      { character: "犭", pinyin: "quǎn", meaning: "Bộ Khuyển (Thú bốn chân)", mnemonic: "Hình ảnh con chó đang đứng nghiêng, xòe móng vuốt." },
-      { character: "鸟", pinyin: "niǎo", meaning: "Bộ Điểu (Chim)", mnemonic: "Hình ảnh chú chim với mỏ, cánh và đuôi." },
-      { character: "虫", pinyin: "chóng", meaning: "Bộ Trùng (Sâu bọ/Côn trùng)", mnemonic: "Hình ảnh con sâu đang bò." },
-      { character: "马", pinyin: "mǎ", meaning: "Bộ Mã (Ngựa)", mnemonic: "Hình ảnh con ngựa với bờm và đuôi dài." },
-      { character: "鱼", pinyin: "yú", meaning: "Bộ Ngư (Cá)", mnemonic: "Hình ảnh con cá với đầu, vảy và đuôi." },
-      { character: "贝", pinyin: "bèi", meaning: "Bộ Bối (Vỏ sò/Tiền)", mnemonic: "Vỏ sò, đơn vị tiền tệ quý giá thời xưa." },
-      { character: "纟", pinyin: "mì", meaning: "Bộ Mịch (Sợi tơ)", mnemonic: "Những sợi tơ tằm quấn lại với nhau." },
-      { character: "羊", pinyin: "yáng", meaning: "Bộ Dương (Con dê/cừu)", mnemonic: "Cái đầu dê với hai chiếc sừng cong." },
-      { character: "牛", pinyin: "niú", meaning: "Bộ Ngưu (Con trâu/bò)", mnemonic: "Cái đầu trâu với cặp sừng thẳng đứng." },
+      { character: "犭", pinyin: "quǎn", meaning: "Bộ Khuyển (Thú bốn chân)", mnemonic: "Hình ảnh con chó đang đứng nghiêng, xòe móng vuốt.", examples: ["狗 (gǒu) - Chó", "猫 (māo) - Mèo"] },
+      { character: "鸟", pinyin: "niǎo", meaning: "Bộ Điểu (Chim)", mnemonic: "Hình ảnh chú chim với mỏ, cánh và đuôi.", examples: ["鸡 (jī) - Gà", "鸭 (yā) - Vịt"] },
+      { character: "虫", pinyin: "chóng", meaning: "Bộ Trùng (Sâu bọ/Côn trùng)", mnemonic: "Hình ảnh con sâu đang bò.", examples: ["虽 (suī) - Tuy", "蛋 (dàn) - Trứng"] },
+      { character: "马", pinyin: "mǎ", meaning: "Bộ Mã (Ngựa)", mnemonic: "Hình ảnh con ngựa với bờm và đuôi dài.", examples: ["妈 (mā) - Mẹ", "骑 (qí) - Cưỡi"] },
+      { character: "鱼", pinyin: "yú", meaning: "Bộ Ngư (Cá)", mnemonic: "Hình ảnh con cá với đầu, vảy và đuôi.", examples: ["鲜 (xiān) - Tươi", "鲁 (lǔ) - Lỗ"] },
+      { character: "贝", pinyin: "bèi", meaning: "Bộ Bối (Vỏ sò/Tiền)", mnemonic: "Vỏ sò, đơn vị tiền tệ quý giá thời xưa.", examples: ["贵 (guì) - Đắt", "买 (mǎi) - Mua"] },
+      { character: "纟", pinyin: "mì", meaning: "Bộ Mịch (Sợi tơ)", mnemonic: "Những sợi tơ tằm quấn lại với nhau.", examples: ["红 (hóng) - Đỏ", "给 (gěi) - Cho"] },
+      { character: "羊", pinyin: "yáng", meaning: "Bộ Dương (Con dê/cừu)", mnemonic: "Cái đầu dê với hai chiếc sừng cong.", examples: ["美 (měi) - Đẹp", "群 (qún) - Đàn"] },
+      { character: "牛", pinyin: "niú", meaning: "Bộ Ngưu (Con trâu/bò)", mnemonic: "Cái đầu trâu với cặp sừng thẳng đứng.", examples: ["物 (wù) - Vật", "特 (tè) - Đặc"] },
     ]
   },
   {
@@ -77,17 +78,17 @@ export const RADICAL_CATEGORIES = [
     name: "Thiên nhiên & Thời gian",
     icon: "Sun",
     radicals: [
-      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (Cây cối)", mnemonic: "Hình ảnh một cái cây với tán lá và rễ." },
-      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (Nước)", mnemonic: "Ba giọt nước đang bắn ra.", variants: ["水"] },
-      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (Lửa)", mnemonic: "Hình ảnh ngọn lửa đang bốc cháy.", variants: ["灬"] },
-      { character: "土", pinyin: "tǔ", meaning: "Bộ Thổ (Đất)", mnemonic: "Mầm cây mọc lên từ mặt đất." },
-      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (Mặt trời/Ngày)", mnemonic: "Hình tròn của mặt trời với một vạch ở giữa." },
-      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (Mặt trăng/Tháng)", mnemonic: "Hình bán nguyệt của mặt trăng khuyết." },
-      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (Mưa)", mnemonic: "Những giọt mưa rơi xuống từ đám mây." },
-      { character: "金", pinyin: "jīn", meaning: "Bộ Kim (Kim loại/Vàng)", mnemonic: "Kim loại quý được cất giữ sâu dưới lòng đất." },
-      { character: "山", pinyin: "shān", meaning: "Bộ Sơn (Núi)", mnemonic: "Hình ảnh ba ngọn núi nhấp nhô." },
-      { character: "石", pinyin: "shí", meaning: "Bộ Thạch (Đá)", mnemonic: "Hòn đá nằm dưới chân vách núi." },
-      { character: "气", pinyin: "qì", meaning: "Bộ Khí (Hơi nước/Khí)", mnemonic: "Làn sương khói bay lượn trên không trung." },
+      { character: "木", pinyin: "mù", meaning: "Bộ Mộc (Cây cối)", mnemonic: "Hình ảnh một cái cây với tán lá và rễ.", examples: ["树 (shù) - Cây", "林 (lín) - Rừng"] },
+      { character: "氵", pinyin: "shuǐ", meaning: "Bộ Thủy (Nước)", mnemonic: "Ba giọt nước đang bắn ra.", variants: ["水"], examples: ["没 (méi) - Không", "洗 (xǐ) - Rửa"] },
+      { character: "火", pinyin: "huǒ", meaning: "Bộ Hỏa (Lửa)", mnemonic: "Hình ảnh ngọn lửa đang bốc cháy.", variants: ["灬"], examples: ["热 (rè) - Nóng", "照 (zhào) - Chiếu"] },
+      { character: "土", pinyin: "tǔ", meaning: "Bộ Thổ (Đất)", mnemonic: "Mầm cây mọc lên từ mặt đất.", examples: ["地 (dì) - Đất", "在 (zài) - Tại"] },
+      { character: "日", pinyin: "rì", meaning: "Bộ Nhật (Mặt trời/Ngày)", mnemonic: "Hình tròn của mặt trời với một vạch ở giữa.", examples: ["明 (míng) - Sáng", "时 (shí) - Thời"] },
+      { character: "月", pinyin: "yuè", meaning: "Bộ Nguyệt (Mặt trăng/Tháng)", mnemonic: "Hình bán nguyệt của mặt trăng khuyết.", examples: ["朋 (péng) - Bạn", "期 (qī) - Kì"] },
+      { character: "雨", pinyin: "yǔ", meaning: "Bộ Vũ (Mưa)", mnemonic: "Những giọt mưa rơi xuống từ đám mây.", examples: ["雪 (xuě) - Tuyết", "零 (líng) - Không"] },
+      { character: "金", pinyin: "jīn", meaning: "Bộ Kim (Kim loại/Vàng)", mnemonic: "Kim loại quý được cất giữ sâu dưới lòng đất.", examples: ["钱 (qián) - Tiền", "银 (yín) - Bạc"] },
+      { character: "山", pinyin: "shān", meaning: "Bộ Sơn (Núi)", mnemonic: "Hình ảnh ba ngọn núi nhấp nhô.", examples: ["岁 (suì) - Tuổi", "出 (chū) - Ra"] },
+      { character: "石", pinyin: "shí", meaning: "Bộ Thạch (Đá)", mnemonic: "Hòn đá nằm dưới chân vách núi.", examples: ["破 (pò) - Phá", "硬 (yìng) - Cứng"] },
+      { character: "气", pinyin: "qì", meaning: "Bộ Khí (Hơi nước/Khí)", mnemonic: "Làn sương khói bay lượn trên không trung.", examples: ["汽 (qì) - Khí/hơi", "氧 (yǎng) - Oxy"] },
     ]
   },
   {
@@ -95,16 +96,16 @@ export const RADICAL_CATEGORIES = [
     name: "Vật dụng & Công cụ",
     icon: "Box",
     radicals: [
-      { character: "巾", pinyin: "jīn", meaning: "Bộ Cân (Khăn)", mnemonic: "Hình ảnh tấm vải/khăn treo trên giá." },
-      { character: "衣", pinyin: "yī", meaning: "Bộ Y (Áo quần)", mnemonic: "Hình vẽ chiếc áo có tà áo và tay áo." },
-      { character: "舟", pinyin: "zhōu", meaning: "Bộ Chu (Thuyền)", mnemonic: "Hình ảnh chiếc thuyền nhỏ lướt trên sông." },
-      { character: "车", pinyin: "chē", meaning: "Bộ Xa (Xe)", mnemonic: "Chiếc xe nhìn từ trên xuống với các bánh xe." },
-      { character: "门", pinyin: "mén", meaning: "Bộ Môn (Cửa)", mnemonic: "Hình ảnh hai cánh cửa của một ngôi nhà." },
-      { character: "玉", pinyin: "yù", meaning: "Bộ Ngọc (Đá quý/Ngọc)", mnemonic: "Những viên ngọc quý xâu thành chuỗi (có thêm một dấu chấm)." },
-      { character: "皿", pinyin: "mǐn", meaning: "Bộ Mãnh (Bát đĩa)", mnemonic: "Chiếc bát hoặc đĩa có chân đế." },
-      { character: "竹", pinyin: "zhú", meaning: "Bộ Trúc (Tre)", mnemonic: "Hai lá tre rủ xuống từ cành tre." },
-      { character: "刀", pinyin: "dāo", meaning: "Bộ Đao (Con dao)", mnemonic: "Hình ảnh một con dao cong sắc bén." },
-      { character: "弓", pinyin: "gōng", meaning: "Bộ Cung (Cái cung)", mnemonic: "Hình vẽ cái cung đang giương ra." },
+      { character: "巾", pinyin: "jīn", meaning: "Bộ Cân (Khăn)", mnemonic: "Hình ảnh tấm vải/khăn treo trên giá.", examples: ["师 (shī) - Thầy", "常 (cháng) - Thường"] },
+      { character: "衣", pinyin: "yī", meaning: "Bộ Y (Áo quần)", mnemonic: "Hình vẽ chiếc áo có tà áo và tay áo.", examples: ["装 (zhuāng) - Trang", "袋 (dài) - Túi"] },
+      { character: "舟", pinyin: "zhōu", meaning: "Bộ Chu (Thuyền)", mnemonic: "Hình ảnh chiếc thuyền nhỏ lướt trên sông.", examples: ["船 (chuán) - Thuyền", "航 (háng) - Hàng"] },
+      { character: "车", pinyin: "chē", meaning: "Bộ Xa (Xe)", mnemonic: "Chiếc xe nhìn từ trên xuống với các bánh xe.", examples: ["军 (jūn) - Quân", "较 (jiào) - So/khá"] },
+      { character: "门", pinyin: "mén", meaning: "Bộ Môn (Cửa)", mnemonic: "Hình ảnh hai cánh cửa của một ngôi nhà.", examples: ["问 (wèn) - Hỏi", "间 (jiān) - Gian"] },
+      { character: "玉", pinyin: "yù", meaning: "Bộ Ngọc (Đá quý/Ngọc)", mnemonic: "Những viên ngọc quý xâu thành chuỗi (có thêm một dấu chấm).", examples: ["理 (lǐ) - Lý", "球 (qiú) - Bóng"] },
+      { character: "皿", pinyin: "mǐn", meaning: "Bộ Mãnh (Bát đĩa)", mnemonic: "Chiếc bát hoặc đĩa có chân đế.", examples: ["盘 (pán) - Đĩa", "盖 (gài) - Nắp"] },
+      { character: "竹", pinyin: "zhú", meaning: "Bộ Trúc (Tre)", mnemonic: "Hai lá tre rủ xuống từ cành tre.", examples: ["等 (děng) - Đợi", "第 (dì) - Thứ"] },
+      { character: "刀", pinyin: "dāo", meaning: "Bộ Đao (Con dao)", mnemonic: "Hình ảnh một con dao cong sắc bén.", examples: ["分 (fēn) - Phân/phút", "前 (qián) - Trước"] },
+      { character: "弓", pinyin: "gōng", meaning: "Bộ Cung (Cái cung)", mnemonic: "Hình vẽ cái cung đang giương ra.", examples: ["张 (zhāng) - Lượng từ", "弥 (mí) - Bù đắp"] },
     ]
   },
   {
@@ -112,12 +113,12 @@ export const RADICAL_CATEGORIES = [
     name: "Thực vật & Ăn uống",
     icon: "Leaf",
     radicals: [
-      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (Cỏ/Cây cỏ)", variants: ["草"] },
-      { character: "禾", pinyin: "hé", meaning: "Bộ Hòa (Lúa)" },
-      { character: "米", pinyin: "mǐ", meaning: "Bộ Mễ (Gạo)" },
-      { character: "饣", pinyin: "shí", meaning: "Bộ Thực (Ăn)", variants: ["食"] },
-      { character: "瓜", pinyin: "guā", meaning: "Bộ Qua (Quả dưa)" },
-      { character: "豆", pinyin: "dòu", meaning: "Bộ Đậu (Hạt đậu)" },
+      { character: "艹", pinyin: "cǎo", meaning: "Bộ Thảo (Cỏ/Cây cỏ)", variants: ["草"], examples: ["茶 (chá) - Trà", "菜 (cài) - Rau"] },
+      { character: "禾", pinyin: "hé", meaning: "Bộ Hòa (Lúa)", examples: ["和 (hé) - Và/hòa", "种 (zhǒng) - Chủng/loại"] },
+      { character: "米", pinyin: "mǐ", meaning: "Bộ Mễ (Gạo)", examples: ["粉 (fěn) - Bột", "糕 (gāo) - Bánh"] },
+      { character: "饣", pinyin: "shí", meaning: "Bộ Thực (Ăn)", variants: ["食"], examples: ["饭 (fàn) - Cơm", "饿 (è) - Đói"] },
+      { character: "瓜", pinyin: "guā", meaning: "Bộ Qua (Quả dưa)", examples: ["孤 (gū) - Cô", "狐 (hú) - Con cáo"] },
+      { character: "豆", pinyin: "dòu", meaning: "Bộ Đậu (Hạt đậu)", examples: ["短 (duǎn) - Ngắn", "登 (dēng) - Đăng/lên"] },
     ]
   },
   {
@@ -125,15 +126,15 @@ export const RADICAL_CATEGORIES = [
     name: "Xã hội & Tư duy",
     icon: "Users",
     radicals: [
-      { character: "礻", pinyin: "shì", meaning: "Bộ Thị (Thần thánh/Cúng bái)", variants: ["示"] },
-      { character: "衤", pinyin: "yī", meaning: "Bộ Y (Biến thể của áo)", variants: ["衣"] },
-      { character: "疒", pinyin: "nè", meaning: "Bộ Nạch (Bệnh tật)" },
-      { character: "广", pinyin: "guǎng", meaning: "Bộ Nghiễm (Mái nhà/Tòa nhà)" },
-      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (Mái nhà)" },
-      { character: "文", pinyin: "wén", meaning: "Bộ Văn (Văn chương/Chữ nghĩa)" },
-      { character: "言", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói)", variants: ["讠"] },
-      { character: "讠", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói - Giản thể)", variants: ["言"] },
-      { character: "方", pinyin: "fāng", meaning: "Bộ Phương (Phuơng hướng)" },
+      { character: "礻", pinyin: "shì", meaning: "Bộ Thị (Thần thánh/Cúng bái)", variants: ["示"], examples: ["祝 (zhù) - Chúc", "福 (fú) - Phúc"] },
+      { character: "衤", pinyin: "yī", meaning: "Bộ Y (Biến thể của áo)", variants: ["衣"], examples: ["裤 (kù) - Quần", "裙 (qún) - Váy"] },
+      { character: "疒", pinyin: "nè", meaning: "Bộ Nạch (Bệnh tật)", examples: ["病 (bìng) - Bệnh", "痛 (tòng) - Đau"] },
+      { character: "广", pinyin: "guǎng", meaning: "Bộ Nghiễm (Mái nhà/Tòa nhà)", examples: ["店 (diàn) - Cửa tiệm", "床 (chuáng) - Giường"] },
+      { character: "宀", pinyin: "mián", meaning: "Bộ Miên (Mái nhà)", examples: ["家 (jiā) - Nhà", "客 (kè) - Khách"] },
+      { character: "文", pinyin: "wén", meaning: "Bộ Văn (Văn chương/Chữ nghĩa)", examples: ["这 (zhè) - Đây", "斑 (bān) - Đốm"] },
+      { character: "言", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói)", variants: ["讠"], examples: ["信 (xìn) - Tin", "警 (jǐng) - Cảnh sát"] },
+      { character: "讠", pinyin: "yán", meaning: "Bộ Ngôn (Lời nói - Giản thể)", variants: ["言"], examples: ["说 (shuō) - Nói", "语 (yǔ) - Ngôn ngữ"] },
+      { character: "方", pinyin: "fāng", meaning: "Bộ Phương (Phuơng hướng)", examples: ["放 (fàng) - Đặt/để", "房 (fáng) - Căn phòng"] },
     ]
   }
 ];
@@ -146,6 +147,11 @@ export interface Vocabulary {
   examplePinyin?: string;
   exampleTranslation?: string;
   level?: string;
+  mnemonic?: string;
+  customExamples?: string[];
+  components?: string[];
+  id?: string;
+  topicId?: string;
 }
 
 export interface DialogueLine {

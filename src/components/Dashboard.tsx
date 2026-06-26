@@ -20,8 +20,10 @@ import { QuizView } from './QuizView';
 import { SentenceOrderingView } from './SentenceOrderingView';
 import { ScrollableTabContainer } from './ScrollableTabContainer';
 import { CompoundWordsView } from './CompoundWordsView';
+import { MEASURE_WORDS } from '../data/measureWordsData';
 import { BeginnerRoadmapView } from './BeginnerRoadmapView';
 import { PinyinPronunciationView } from './PinyinPronunciationView';
+import { GrammarPracticeView } from './GrammarPracticeView';
 
 
 function normalizeText(text: string): string {
@@ -35,8 +37,9 @@ export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState<string | null>(null);
   const [voiceGender, setVoiceGender] = useState<'female'|'male'>('female');
 
-  const [mainTab, setMainTab] = useState<'vocab' | 'roadmap' | 'pinyin' | 'radicals' | 'grammar' | 'practice' | 'sentences' | 'word-match'>('roadmap');
-  const [practiceMode, setPracticeMode] = useState<'flashcards' | 'quiz' | null>(null);
+  const [mainTab, setMainTab] = useState<'vocab' | 'roadmap' | 'pinyin' | 'radicals' | 'grammar' | 'practice' | 'sentences' | 'word-match' | 'measure-words'>('roadmap');
+  const [practiceMode, setPracticeMode] = useState<'flashcards' | 'quiz' | 'grammar-practice' | null>(null);
+  const [flashcardCategory, setFlashcardCategory] = useState<'vocab' | 'radicals' | 'measure-words'>('vocab');
 const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
   const [expandedGrammarId, setExpandedGrammarId] = useState<string | null>(null);
 
@@ -44,36 +47,69 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
     if (!selectedWord) return [];
     
     if (selectedWord.topicId === 'radicals') {
-      const category = RADICAL_CATEGORIES.find(cat => 
-        cat.radicals.some(r => r.character === selectedWord.character)
-      );
-      if (category) {
-        return category.radicals.map(r => ({
-          id: `radical-${r.character}`,
-          character: r.character,
-          pinyin: r.pinyin,
-          meaning: r.meaning,
-          mnemonic: r.mnemonic,
-          variants: r.variants,
-          type: 'radical',
-          topicId: 'radicals',
-          topicTitle: `Bộ Thủ - ${category.name}`
-        } as WordItem));
-      }
-      return [];
+      const allRads: WordItem[] = [];
+      RADICAL_CATEGORIES.forEach(cat => {
+        cat.radicals.forEach(r => {
+          allRads.push({
+            id: `radical-${r.character}`,
+            character: r.character,
+            pinyin: r.pinyin,
+            meaning: r.meaning,
+            mnemonic: r.mnemonic,
+            variants: r.variants,
+            customExamples: r.examples,
+            type: 'radical',
+            topicId: 'radicals',
+            topicTitle: `Bộ Thủ - ${cat.name}`
+          } as WordItem);
+        });
+      });
+      return allRads;
     } else {
       const topic = [...CHINESE_DATA, ...CHINESE_301_TOPICS].find(t => t.id === selectedWord.topicId);
-      if (topic && topic.radicals) {
-        return topic.radicals.map(r => ({
-           id: `radical-${r.character}`,
-           character: r.character,
-           pinyin: r.pinyin,
-           meaning: r.meaning,
-           mnemonic: r.mnemonic,
-           variants: r.variants,
-           type: 'radical',
+      if (!topic) return [];
+
+      if (selectedWord.type === 'radical') {
+        if (topic.radicals) {
+          return topic.radicals.map(r => ({
+             id: `radical-${r.character}`,
+             character: r.character,
+             pinyin: r.pinyin,
+             meaning: r.meaning,
+             mnemonic: r.mnemonic,
+             variants: r.variants,
+             customExamples: r.examples,
+             type: 'radical',
+             topicId: topic.id,
+             topicTitle: topic.title
+          } as WordItem));
+        }
+      } else {
+        // Find vocabulary siblings
+        // If the word has a lessonId, find siblings in that lesson, otherwise topic.vocabulary
+        let siblings: Vocabulary[] = [];
+        if (selectedWord.lessonId && topic.lessons) {
+           const lesson = topic.lessons.find(l => l.id === selectedWord.lessonId);
+           if (lesson) siblings = lesson.vocabulary;
+        } else {
+           siblings = topic.vocabulary || [];
+        }
+
+        return siblings.map(v => ({
+           id: v.id || `vocab-${v.character}`,
+           character: v.character,
+           pinyin: v.pinyin,
+           meaning: v.meaning,
+           example: v.example,
+           examplePinyin: v.examplePinyin,
+           exampleTranslation: v.exampleTranslation,
+           mnemonic: v.mnemonic,
+           customExamples: v.customExamples,
+           components: v.components,
+           type: 'vocab',
            topicId: topic.id,
-           topicTitle: topic.title
+           topicTitle: topic.title,
+           lessonId: selectedWord.lessonId
         } as WordItem));
       }
     }
@@ -102,6 +138,25 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
     });
     // Remove duplicates based on character
     return Array.from(new globalThis.Map(vocab.map(v => [v.character, v])).values());
+  }, []);
+
+  const allRadicalsVocab = useMemo(() => {
+    let radicals: Vocabulary[] = [];
+    RADICAL_CATEGORIES.forEach((cat, index) => {
+      cat.radicals.forEach((r, rIndex) => {
+        radicals.push({
+          id: `rad_${index}_${rIndex}`,
+          character: r.character,
+          pinyin: r.pinyin,
+          meaning: r.meaning,
+          level: 'Bộ thủ',
+          mnemonic: r.mnemonic, // pass mnemonic for radicals
+          topicId: 'radicals',
+          customExamples: r.examples,
+        });
+      });
+    });
+    return radicals;
   }, []);
 
   // Pre-load voices for better reliability
@@ -303,6 +358,12 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
             Ghép từ
           </button>
           <button 
+            onClick={() => setMainTab('measure-words')}
+            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'measure-words' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+          >
+            Lượng từ
+          </button>
+          <button 
             onClick={() => setMainTab('sentences')}
             className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'sentences' ? "bg-white text-orange-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
           >
@@ -320,6 +381,46 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
       {mainTab === 'word-match' && (
         <section className="mb-24">
           <CompoundWordsView playAudio={playAudio} />
+        </section>
+      )}
+
+      {mainTab === 'measure-words' && (
+        <section className="mb-24">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+              <Book size={20} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Danh mục lượng từ</h2>
+              <p className="text-sm text-gray-500">Các lượng từ thông dụng trong tiếng Trung thường gặp</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {MEASURE_WORDS.map((mw) => (
+              <div 
+                key={mw.id} 
+                className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => setSelectedWord({
+                  ...mw,
+                  type: 'measure_word',
+                  topicTitle: 'Lượng từ',
+                  topicId: 'measure_words',
+                } as any)}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="text-3xl font-black text-gray-900">{mw.character}</div>
+                  <span className="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-md text-xs font-bold">{mw.level}</span>
+                </div>
+                <div className="text-emerald-600 font-bold mb-1">{mw.pinyin}</div>
+                <div className="text-gray-900 font-medium text-sm mb-3">{mw.meaning}</div>
+                <div className="bg-gray-50 p-3 rounded-xl">
+                  <div className="text-gray-900 font-medium">{mw.example}</div>
+                  <div className="text-gray-500 text-xs mb-1">{mw.examplePinyin}</div>
+                  <div className="text-gray-600 text-xs italic">{mw.exampleTranslation}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
@@ -353,6 +454,27 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
       {mainTab === 'roadmap' && (
         <section className="mb-24">
           <BeginnerRoadmapView onNavigate={setMainTab} />
+          
+          <div className="mt-16">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+                <Book size={20} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-gray-900 tracking-tight">Giáo trình 301 Câu</h2>
+                <p className="text-sm text-gray-500">Lộ trình học theo bài học chuẩn</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {CHINESE_301_TOPICS.slice(0, 30).map((topic) => (
+                <TopicCard 
+                  key={topic.id} 
+                  topic={topic} 
+                  onClick={(t) => setSelectedTopic(t)} 
+                />
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
@@ -372,6 +494,26 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
               <h2 className="text-2xl font-black text-gray-900 tracking-tight">Cấu trúc câu cơ bản</h2>
               <p className="text-sm text-gray-500">Nắm vững nền tảng ngữ pháp tiếng Trung qua các mẫu câu thông dụng</p>
             </div>
+          </div>
+
+          {/* Action row link to Grammar Practice */}
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100 rounded-3xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-center sm:text-left">
+              <span className="text-2xl">🔥</span>
+              <div>
+                <h3 className="font-bold text-indigo-950 text-base">Bạn muốn kiểm tra học lực ngữ pháp?</h3>
+                <p className="text-xs text-indigo-700 font-medium">Bắt đầu trả lời 6 danh mục bài tập thực hành ngữ pháp chuyên biệt.</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => {
+                setMainTab('practice');
+                setPracticeMode('grammar-practice');
+              }}
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-100 whitespace-nowrap active:scale-95"
+            >
+              Luyện tập Ngữ pháp ngay →
+            </button>
           </div>
           
           <div className="flex flex-col gap-4">
@@ -497,6 +639,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
                           meaning: r.meaning,
                           mnemonic: r.mnemonic,
                           variants: r.variants,
+                          customExamples: r.examples,
                           type: 'radical',
                           topicId: 'radicals',
                           topicTitle: `Bộ Thủ - ${cat.name}`
@@ -549,7 +692,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
                 Ôn luyện toàn bộ từ vựng đã học qua hệ thống Flashcard kết hợp thuật toán lặp lại ngắt quãng (Spaced Repetition) và các bài Trắc nghiệm ngẫu nhiên.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
                  <div 
                    onClick={() => setPracticeMode('flashcards')}
                    className="bg-gradient-to-br from-pink-50 to-rose-50 p-8 rounded-[40px] border border-pink-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
@@ -575,6 +718,19 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
                          Bắt đầu thi
                      </div>
                  </div>
+
+                 <div 
+                   onClick={() => setPracticeMode('grammar-practice')}
+                   className="bg-gradient-to-br from-emerald-50 to-green-50 p-8 rounded-[40px] border border-emerald-100 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2">
+                     <div className="absolute top-6 right-6 text-emerald-200 group-hover:scale-110 transition-transform">
+                       <FileText size={60} />
+                     </div>
+                     <h3 className="text-xl font-bold text-emerald-900 mb-2 relative z-10">Luyện tập ngữ pháp</h3>
+                     <p className="text-sm text-emerald-700 opacity-80 mb-6 relative z-10">Rèn luyện cấu trúc câu qua danh mục 6 dạng bài tập trắc nghiệm chuyên sâu.</p>
+                     <div className="inline-flex bg-white text-emerald-600 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm relative z-10 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                         Bắt đầu luyện
+                     </div>
+                 </div>
               </div>
             </>
           ) : (
@@ -588,10 +744,39 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
               </button>
               
               {practiceMode === 'flashcards' && (
-                <FlashcardsView vocabList={allGlobalVocab} playAudio={playAudio} />
+                <div className="w-full flex flex-col items-center">
+                   <div className="flex flex-wrap items-center justify-center bg-gray-100 rounded-full p-1 mb-8 w-fit shadow-inner mx-auto gap-1">
+                      <button 
+                         onClick={() => setFlashcardCategory('vocab')}
+                         className={cn("px-6 py-2 rounded-full text-sm font-bold transition-colors", flashcardCategory === 'vocab' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+                      >
+                         Từ vựng
+                      </button>
+                      <button 
+                         onClick={() => setFlashcardCategory('measure-words')}
+                         className={cn("px-6 py-2 rounded-full text-sm font-bold transition-colors", flashcardCategory === 'measure-words' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+                      >
+                         Lượng từ
+                      </button>
+                      <button 
+                         onClick={() => setFlashcardCategory('radicals')}
+                         className={cn("px-6 py-2 rounded-full text-sm font-bold transition-colors", flashcardCategory === 'radicals' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+                      >
+                         214 Bộ thủ
+                      </button>
+                   </div>
+                   <FlashcardsView vocabList={flashcardCategory === 'vocab' ? allGlobalVocab : flashcardCategory === 'measure-words' ? MEASURE_WORDS : allRadicalsVocab} playAudio={playAudio} />
+                </div>
               )}
               {practiceMode === 'quiz' && (
                 <QuizView vocabList={allGlobalVocab} />
+              )}
+              {practiceMode === 'grammar-practice' && (
+                <GrammarPracticeView 
+                  onBackToDashboard={() => setPracticeMode(null)} 
+                  playAudio={playAudio} 
+                  isPlaying={isPlaying} 
+                />
               )}
             </div>
           )}

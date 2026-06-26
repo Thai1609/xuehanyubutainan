@@ -40,7 +40,7 @@ export default function App() {
             <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-orange-100">
               汉
             </div>
-            <span className="font-bold text-2xl tracking-tighter text-orange-600">Hanyubutainan</span>
+            <span className="font-bold text-2xl tracking-tighter text-orange-600">xuehanyubutainan</span>
           </div>
 
           {/* Desktop Nav */}
@@ -144,10 +144,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">汉</div>
-            <span className="font-bold text-lg tracking-tight text-orange-600">Hanyubutainan</span>
+            <span className="font-bold text-lg tracking-tight text-orange-600">xuehanyubutainan</span>
           </div>
           <div className="text-sm font-medium text-gray-400">
-            © 2026 Hanyubutainan. Designed for Learners.
+            © 2026 xuehanyubutainan. Designed for Learners.
           </div>
         </div>
       </footer>

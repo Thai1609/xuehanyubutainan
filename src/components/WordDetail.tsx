@@ -4,7 +4,7 @@ import StrokeWriter, { StrokeWriterRef } from './StrokeWriter';
 import { cn } from '../lib/utils';
 
 export interface WordItem {
-  type: 'vocab' | 'radical';
+  type: 'vocab' | 'radical' | 'measure_word';
   character: string;
   pinyin: string;
   meaning: string;
@@ -12,9 +12,12 @@ export interface WordItem {
   topicTitle: string;
   lessonId?: string;
   example?: string;
+  examplePinyin?: string;
   exampleTranslation?: string;
   variants?: string[];
   mnemonic?: string;
+  customExamples?: string[];
+  components?: string[];
 }
 
 interface WordDetailProps {
@@ -66,7 +69,7 @@ export default function WordDetail({ word, onBack, playAudio, isPlaying, onNext,
     if (word.example) {
       found.push({
         chinese: word.example,
-        pinyin: '', // The data might not have pinyin for the example
+        pinyin: word.examplePinyin || '', 
         translation: word.exampleTranslation || '',
       });
     }
@@ -198,11 +201,43 @@ export default function WordDetail({ word, onBack, playAudio, isPlaying, onNext,
       ]
     };
 
-    // Add manual examples for radicals
+    // Add manual examples for radicals from RADICAL_EXAMPLES
     if (word.type === 'radical' && RADICAL_EXAMPLES[currentColChar]) {
       RADICAL_EXAMPLES[currentColChar].forEach(ex => {
         if (!found.some(e => e.chinese === ex.chinese)) {
           found.push(ex);
+        }
+      });
+    }
+
+    // Add examples from the new customExamples array
+    if (word.customExamples) {
+      word.customExamples.forEach(exStr => {
+        let chinese = '';
+        let pinyin = '';
+        let translation = '';
+        
+        const dashParts = exStr.split('-');
+        if (dashParts.length >= 2) {
+           const beforeDash = dashParts[0].trim();
+           translation = dashParts.slice(1).join('-').trim();
+           
+           const parenMatch = beforeDash.match(/^(.+?)\s*\((.+?)\)$/);
+           if (parenMatch) {
+              chinese = parenMatch[1].trim();
+              pinyin = parenMatch[2].trim();
+           } else {
+              chinese = beforeDash;
+           }
+           
+           if (!found.some(e => e.chinese === chinese)) {
+             found.push({ chinese, pinyin, translation });
+           }
+        } else if (exStr.trim()) {
+           // Fallback if no dash
+           if (!found.some(e => e.chinese === exStr.trim())) {
+             found.push({ chinese: exStr.trim(), pinyin: '', translation: '' });
+           }
         }
       });
     }
@@ -224,14 +259,14 @@ export default function WordDetail({ word, onBack, playAudio, isPlaying, onNext,
   }, [word, currentColChar]);
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-4xl mx-auto py-8 sm:py-12 px-4 sm:px-10 bg-[#faf9f6] min-h-[80vh] rounded-[32px] shadow-sm border border-gray-100">
       {/* Back Button */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <button 
           onClick={onBack}
-          className="px-5 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-colors shadow-sm"
+          className="px-5 py-2.5 rounded-full bg-white border border-gray-200 text-sm font-bold text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors shadow-sm"
         >
-          <ArrowLeft size={14} />
+          <ArrowLeft size={16} />
           <span>Quay lại</span>
         </button>
 
@@ -239,188 +274,170 @@ export default function WordDetail({ word, onBack, playAudio, isPlaying, onNext,
           {onPrev && (
             <button 
               onClick={onPrev}
-              className="px-4 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-colors shadow-sm"
+              className="p-2.5 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center justify-center transition-colors shadow-sm"
+              title="Trước đó"
             >
-              <ChevronLeft size={14} />
-              <span className="hidden sm:inline">Trước đó</span>
+              <ChevronLeft size={20} />
             </button>
           )}
           {onNext && (
             <button 
               onClick={onNext}
-              className="px-4 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-colors shadow-sm"
+              className="p-2.5 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center justify-center transition-colors shadow-sm"
+              title="Tiếp theo"
             >
-              <span className="hidden sm:inline">Tiếp theo</span>
-              <ChevronRight size={14} />
+              <ChevronRight size={20} />
             </button>
           )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-5">
-        <div className="bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden p-6 flex flex-col gap-5">
-          
-          {/* Top small character selector like "汉 字 漢" / Multiple character words */}
-          {characters.length > 1 && (
-            <div className="flex items-center gap-1.5 bg-gray-50 w-fit p-1 rounded-xl mb-1">
-              {characters.map((char, index) => (
-                <button 
-                  key={index} 
-                  onClick={() => setSelectedCharIndex(index)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${index === selectedCharIndex ? 'bg-blue-900 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-200'}`}
-                >
-                  {char}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="flex flex-col md:flex-row gap-6 lg:gap-10">
-            {/* Left Side: Character Display */}
-            <div className="flex-shrink-0 flex flex-col items-center gap-3">
-              <div 
-                className={cn(
-                  "relative bg-[#f8f9fa] rounded-2xl border border-gray-100 overflow-hidden flex items-center justify-center transition-all",
-                  word.type !== 'radical' && "group cursor-pointer hover:border-blue-200"
-                )}
-                style={{ width: 160, height: 160 }}
-                onClick={word.type !== 'radical' ? playAnimation : undefined}
-              >
-                {/* Top right rotate icon */}
-                {word.type !== 'radical' && (
-                  <div className="absolute top-2.5 right-2.5 text-gray-400 group-hover:text-blue-600 transition-colors z-10 bg-gray-100 p-1 rounded-full pointer-events-none">
-                    <RotateCcw size={14} />
-                  </div>
-                )}
-
-                {/* Background Grid */}
-                <div className="absolute inset-0 pointer-events-none opacity-10">
-                  <div className="absolute top-1/2 left-0 w-full border-t border-dashed border-gray-600"></div>
-                  <div className="absolute left-1/2 top-0 h-full border-l border-dashed border-gray-600"></div>
-                  <div className="absolute inset-0 border-[0.5px] border-dashed border-gray-600 transform -rotate-45"></div>
-                  <div className="absolute inset-0 border-[0.5px] border-dashed border-gray-600 transform rotate-45"></div>
-                </div>
-                
-                {/* Stroke Writer */}
-                <div className="relative z-10 w-full h-full flex items-center justify-center">
-                  <StrokeWriter 
-                    ref={strokeWriterRef}
-                    character={characters[selectedCharIndex]} 
-                    size={130} 
-                    strokeColor="#1e3a8a" // dark blue
-                    radicalColor="#dc2626" // red
-                  />
-                </div>
-              </div>
+      <div className="flex flex-col mt-4">
+        
+        {/* Top Section */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-10 sm:gap-16">
+           {/* Left side: Pinyin, Hanzi, Sino-Vietnamese */}
+           <div className="flex flex-col items-center sm:w-1/2">
+              <div className="text-3xl sm:text-4xl font-medium text-gray-800 mb-4">{word.pinyin}</div>
               
-              {word.type !== 'radical' && (
-                <button 
-                  onClick={startQuiz}
-                  className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-sm rounded-xl transition-colors"
-                >
-                  Tập viết
-                </button>
-              )}
-            </div>
+              <div 
+                className="relative cursor-pointer transition-transform hover:scale-105 active:scale-95 my-2" 
+                onClick={word.type !== 'radical' ? playAnimation : undefined}
+                title={word.type !== 'radical' ? "Nhấp để xem nét viết" : undefined}
+              >
+                 <StrokeWriter 
+                   ref={strokeWriterRef}
+                   character={characters[selectedCharIndex]} 
+                   size={160} 
+                   strokeColor="#111827" // strong dark gray/black
+                   radicalColor="#dc2626"
+                 />
+                 <button 
+                   onClick={(e) => { e.stopPropagation(); playAudio(word.character); }}
+                   className="absolute -right-4 -top-4 p-2.5 bg-gray-100/80 hover:bg-gray-200 rounded-full text-gray-600 hover:text-black transition-colors"
+                 >
+                   <Volume2 size={24} />
+                 </button>
+              </div>
 
-            {/* Right Side: Details */}
-            <div className="flex-1 flex flex-col pt-1">
-              <div className="flex flex-col gap-3.5 text-[14px]">
-                
-                {/* Bính âm */}
-                <div className="flex items-center gap-3">
-                  <span className="text-gray-500 w-20">Bính âm:</span>
-                  <div className="flex items-center gap-2 bg-gray-50 px-2.5 py-1 rounded-lg">
-                    <span className="font-bold text-gray-900 text-base">{word.pinyin}</span>
-                    <button 
-                      onClick={() => playAudio(word.character)}
-                      className={`transition-colors ${isPlaying ? 'text-blue-600' : 'text-gray-400 hover:text-blue-600'}`}
-                    >
-                      <Volume2 size={16} />
-                    </button>
+              <div className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-gray-900 mt-6 text-center">
+                 {word.meaning}
+              </div>
+           </div>
+
+           {/* Right side: Metadata */}
+           <div className="flex flex-col gap-6 flex-1 pt-4 sm:pt-14 text-lg">
+             <div className="flex items-start gap-3">
+               <span className="font-bold text-gray-800 min-w-[110px] uppercase text-sm tracking-wider self-center">Phân loại:</span>
+               <span className="text-gray-700 font-medium">
+                 {word.type === 'radical' ? 'Bộ thủ' : word.type === 'measure_word' ? 'Lượng từ' : 'Từ vựng'}
+               </span>
+             </div>
+             <div className="flex items-start gap-3">
+               <span className="font-bold text-gray-800 min-w-[110px] uppercase text-sm tracking-wider self-center">Chủ đề:</span>
+               <span className="text-gray-700 font-medium">{word.topicTitle}</span>
+             </div>
+             {word.components && word.components.length > 0 && (
+               <div className="flex flex-col gap-3 mt-2">
+                 {word.components.map((comp, idx) => {
+                   const parts = comp.split(':');
+                   if (parts.length >= 2) {
+                     return (
+                       <div key={idx} className="flex gap-2 text-lg sm:text-xl">
+                         <span className="font-bold whitespace-nowrap text-gray-900">{parts[0]}:</span>
+                         <span className="text-gray-700">{parts.slice(1).join(':')}</span>
+                       </div>
+                     );
+                   }
+                   return <div key={idx} className="text-gray-800 text-lg sm:text-xl">{comp}</div>;
+                 })}
+               </div>
+             )}
+             {characters.length > 1 && (
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-gray-800 min-w-[110px] uppercase text-sm tracking-wider self-center mt-1">Ký tự:</span>
+                  <div className="flex gap-2 flex-wrap">
+                    {characters.map((char, index) => (
+                      <button 
+                        key={index} 
+                        onClick={() => setSelectedCharIndex(index)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-colors ${index === selectedCharIndex ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                      >
+                        {char}
+                      </button>
+                    ))}
                   </div>
                 </div>
+             )}
+           </div>
+        </div>
 
-                {/* Ý nghĩa */}
-                <div className="flex items-start gap-3">
-                  <span className="text-gray-500 w-20 mt-0.5">Ý nghĩa:</span>
-                  <span className="text-gray-800 flex-1 text-base font-bold uppercase tracking-tight">{word.meaning}</span>
-                </div>
-
-                {/* Lục thư (placeholder) */}
-                <div className="flex items-center gap-3">
-                  <span className="text-gray-500 w-20">Lục thư:</span>
-                  <span className="text-gray-800 font-medium">hội ý</span>
-                </div>
-
-                {/* Bộ / Phân loại */}
-                <div className="flex items-center gap-3">
-                  <span className="text-gray-500 w-20">Phân loại:</span>
-                  <span className="text-gray-800 text-xs">
-                    <span className="font-bold">{word.type === 'radical' ? 'Bộ thủ' : 'Từ vựng'}</span> 
-                    <span className="text-gray-400 ml-2">(Chủ đề: {word.topicTitle})</span>
-                  </span>
-                </div>
-
-                {/* Độ phổ biến */}
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="flex items-center gap-1.5 text-orange-500 bg-orange-50 px-2.5 py-1 rounded-full text-[11px] font-black uppercase">
-                    <Flame size={12} className="fill-orange-500" />
-                    Độ phổ biến: Rất cao
-                  </span>
-                </div>
-
-              </div>
+        {/* Measure word advanced formula */}
+        {word.type === 'measure_word' && (
+          <div className="mt-12 sm:mt-16 bg-emerald-50/50 rounded-3xl p-5 md:p-8 border-2 border-emerald-100">
+            <h4 className="text-emerald-800 font-bold mb-4 text-lg flex items-center gap-3">
+              <span className="bg-emerald-200 text-emerald-800 w-8 h-8 rounded-full flex items-center justify-center text-base">💡</span>
+              Cấu trúc nâng cao
+            </h4>
+            <div className="bg-white px-2 py-4 sm:px-4 sm:py-5 rounded-2xl border border-emerald-200 font-bold text-center text-gray-900 shadow-sm flex flex-col md:flex-row items-center justify-center gap-1.5 md:gap-3 text-sm md:text-base w-full overflow-x-auto">
+              <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-xl whitespace-nowrap border border-blue-100">Số từ/Đại từ</span>
+              <span className="text-gray-300 font-black shrink-0">+</span>
+              <span className="px-3 py-1.5 bg-emerald-500 text-white rounded-xl font-black whitespace-nowrap shadow-sm ring-2 ring-emerald-200 ring-offset-1 shrink-0">{word.character}</span>
+              <span className="text-gray-300 font-black shrink-0">+</span>
+              <span className="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-xl whitespace-nowrap border border-dashed border-orange-200 shrink-0">(Tính từ)</span>
+              <span className="text-gray-300 font-black shrink-0">+</span>
+              <span className="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-xl whitespace-nowrap border border-purple-100 shrink-0">Danh từ</span>
             </div>
+            <p className="mt-5 text-emerald-700 text-center font-medium bg-white/60 py-2 px-4 rounded-lg w-fit mx-auto border border-emerald-200/50 text-sm">
+              Ví dụ: Một cái bàn lớn = 一 (số) + 张 (lượng từ) + 大 (tính từ) + 桌子 (danh từ)
+            </p>
+          </div>
+        )}
+
+        {/* Middle Section: Câu chuyện gợi ý */}
+        {word.type !== 'measure_word' && (
+          <div className="mt-16 sm:mt-20">
+            <h3 className="text-2xl font-serif italic text-gray-900 border-b border-gray-300 pb-2 mb-6 w-fit pr-10">
+              Câu chuyện gợi ý:
+            </h3>
+            <p className="text-xl sm:text-2xl leading-relaxed text-gray-900 font-medium">
+               {word.mnemonic ? (
+                 <span dangerouslySetInnerHTML={{ __html: word.mnemonic.replace(/(Mắt|Miệng|Tim|Tâm hồn|Tai|Mũi|Tự mình|Lưỡi|Răng|Tay|Chân|Thân thể|Xương|Thịt|Người|Phụ nữ|Cha|Trẻ con|Đánh|Kim loại)/g, '<span class="text-red-700 font-bold">$1</span>').replace(/([\u4e00-\u9fa5\u2E80-\u2FD5]+)/g, '<span class="text-red-700 font-bold text-2xl mx-1">$1</span>') }} />
+               ) : (
+                  <span className="text-gray-400 italic">Chưa có câu chuyện gợi ý.</span>
+               )}
+            </p>
+          </div>
+        )}
+
+        {/* Bottom Section: Nghĩa và ví dụ */}
+        <div className="mt-12 sm:mt-16">
+          <h3 className="text-2xl font-serif italic text-gray-900 border-b border-gray-300 pb-2 mb-6 w-fit pr-10">
+            Nghĩa và ví dụ:
+          </h3>
+          <div className="flex flex-col gap-5">
+             {examples.length > 0 ? examples.map((ex, idx) => (
+               <div 
+                 key={idx} 
+                 className="flex flex-col gap-2 text-xl sm:text-2xl group cursor-pointer hover:bg-gray-100/50 p-3 -mx-3 rounded-xl transition-colors" 
+                 onClick={() => playAudio(ex.chinese)}
+               >
+                  <div className="flex items-start gap-3">
+                    <span className="text-gray-500 font-bold w-4 select-none mt-1">-</span>
+                    <span className="text-gray-900 font-bold leading-relaxed">{ex.translation}:</span>
+                  </div>
+                  <div className="flex items-center ml-7 gap-3 flex-wrap">
+                    <span className="text-red-700 font-bold">{ex.chinese}</span>
+                    {ex.pinyin && <span className="text-gray-600 font-mono text-lg sm:text-xl">/{ex.pinyin}/</span>}
+                    <Volume2 size={20} className="text-gray-300 group-hover:text-blue-600 transition-colors hidden sm:block" />
+                  </div>
+               </div>
+             )) : (
+               <div className="text-gray-500 italic text-lg p-2">Chưa có ví dụ.</div>
+             )}
           </div>
         </div>
 
-        {/* Mnemonic Section (Mẹo nhớ) */}
-        {word.mnemonic && (
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-[24px] border border-green-100 shadow-sm p-6">
-            <h3 className="text-lg font-black text-emerald-900 mb-3 flex items-center gap-2 tracking-tighter">
-              <BrainCircuit size={18} className="text-emerald-600" />
-              Mẹo ghi nhớ (Mnemonic)
-            </h3>
-            <div className="bg-white/60 backdrop-blur-sm p-5 rounded-2xl border border-emerald-100/50">
-              <p className="text-emerald-800 font-medium leading-relaxed italic text-base">
-                "{word.mnemonic}"
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Examples Section */}
-        {examples.length > 0 && (
-          <div className="bg-white rounded-[24px] border border-gray-100 shadow-sm p-6">
-            <h3 className="text-lg font-black text-gray-900 mb-4 flex items-center gap-2 tracking-tighter">
-              <BookOpen size={18} className="text-blue-600" />
-              {word.type === 'radical' ? 'Từ vựng phổ biến chứa bộ này' : `Ví dụ (${examples.length})`}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {examples.map((ex, idx) => (
-                <div key={idx} className="bg-gray-50 rounded-2xl p-4 flex items-center justify-between group hover:bg-blue-50 transition-all cursor-pointer">
-                  <div className="flex-1">
-                    <div className="text-lg font-bold text-gray-900 mb-1 tracking-tight group-hover:text-blue-900">{ex.chinese}</div>
-                    <div className="flex items-center gap-2">
-                       {ex.pinyin && <div className="text-blue-600 text-[10px] font-mono leading-none">{ex.pinyin}</div>}
-                       <div className="text-gray-400 text-[10px] italic leading-none">{ex.translation}</div>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playAudio(ex.chinese);
-                    }}
-                    className="p-2 text-gray-300 hover:text-blue-600 transition-colors"
-                  >
-                    <Volume2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -48,7 +48,7 @@ function SingleCharWriter({ char, size, padding, strokeColor, radicalColor, idx,
     };
   }, [char, size, padding, strokeColor, radicalColor, idx, currentWritersRef]);
   
-  return <div ref={containerRef} />;
+  return <div ref={containerRef} className="flex-shrink-0" style={{ width: size, height: size }} />;
 }
 
 const StrokeWriter = forwardRef<StrokeWriterRef, StrokeWriterProps>(({ 
@@ -92,7 +92,7 @@ const StrokeWriter = forwardRef<StrokeWriterRef, StrokeWriterProps>(({
 
   return (
     <div 
-      className={`cursor-pointer inline-flex flex-wrap gap-1 items-center justify-center ${className}`}
+      className={`cursor-pointer flex flex-row gap-1 items-center justify-center shrink-0 ${className}`}
       onClick={handleContainerClick}
       title="Nhấp để xem lại nét vẽ"
     >
