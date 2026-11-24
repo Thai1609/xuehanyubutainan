@@ -1,121 +1,90 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from '@google/genai';
 
-let aiInstance: GoogleGenAI | null = null;
-
-function getAI() {
-  if (!aiInstance) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is missing. Please set it in your environment.");
-    }
-    aiInstance = new GoogleGenAI({ apiKey });
-  }
-  return aiInstance;
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'ai';
+  text: string;
+  timestamp: string;
 }
 
-export const chineseTutorSystemInstruction = `
-Bạn là một giáo viên dạy tiếng Trung nhiệt tình, chuyên về giáo trình "301 Câu Đàm Thoại Tiếng Hoa" và HSK.
-Nhiệm vụ của bạn là:
-1. Giúp người dùng luyện tập giao tiếp tiếng Trung theo các chủ đề ở các trình độ khác nhau.
-2. Cung cấp Pinyin và dịch nghĩa cho mọi câu tiếng Trung bạn viết: 你好! [Nǐ hǎo!] - Chào bạn! 😊
-3. Luôn trả lời bằng tiếng Việt xen kẽ tiếng Trung để người học dễ hiểu.
-4. Sửa lỗi ngữ pháp và pinyin nếu người dùng viết sai một cách nhẹ nhàng.
-5. Sử dụng emojis để cuộc trò chuyện thêm gần gũi.
-`;
+export type TutorMode = 'chat' | 'etymology' | 'grammar';
 
-export async function askAI(prompt: string, context?: string) {
-  try {
-    const ai = getAI();
-    const fullPrompt = context 
-      ? `Với ngữ cảnh về từ vựng tiếng Trung sau: ${context}\n\nHãy trả lời câu hỏi: ${prompt}`
-      : prompt;
+const SYSTEM_PROMPTS: Record<TutorMode, string> = {
+  chat: `Bạn là Gia sư Tiếng Trung ảo thông minh và thân thiện trong ứng dụng "Học Hán ngữ không quá khó" (学汉语不太难).
+Nhiệm vụ: Trò chuyện và đối thoại cùng người học. 
+Quy tắc trả lời:
+1. Luôn phản hồi bằng tiếng Trung kèm phiên âm Pinyin chuẩn và bản dịch tiếng Việt bên dưới.
+2. Dùng từ ngữ phù hợp trình độ từ cơ bản HSK 1 đến nâng cao.
+3. Luôn khích lệ người học tự tin nói tiếng Trung.`,
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: fullPrompt,
-      config: {
-        systemInstruction: "Bạn là một giáo viên tiếng Trung giàu kinh nghiệm dành cho người Việt Nam. Hãy giải thích các từ vựng, ngữ pháp một cách dễ hiểu, cung cấp pinyin và ví dụ minh họa bằng tiếng Trung và tiếng Việt.",
-      },
-    });
+  etymology: `Bạn là Chuyên gia Chiết tự và Nguồn gốc Chữ Hán (汉字构造与起源专家).
+Nhiệm vụ: Phân tích chữ Hán mà người học yêu cầu.
+Quy tắc:
+1. Chỉ rõ bộ thủ chính (Radical) và ý nghĩa của nó.
+2. Giải thích cấu tạo tượng hình, hội ý hoặc hình thanh của chữ.
+3. Kể một câu chuyện ngắn hoặc mẹo ghi nhớ thú vị giúp người học nhớ ngay chữ này.
+4. Liệt kê 2-3 từ ghép thông dụng nhất có chứa chữ này (kèm Pinyin và dịch nghĩa tiếng Việt).`,
 
-    return response.text || "Xin lỗi, tôi không thể xử lý yêu cầu lúc này.";
-  } catch (error) {
-    console.error("Gemini Error:", error);
-    return "Có lỗi xảy ra khi kết nối với trí tuệ nhân tạo.";
-  }
-}
+  grammar: `Bạn là Giảng viên Ngữ pháp Tiếng Trung HSK.
+Nhiệm vụ: Sửa lỗi câu và giải thích ngữ pháp cho người học.
+Quy tắc:
+1. Nhận xét câu của học viên: Chỉ rõ điểm chưa tự nhiên hoặc sai ngữ pháp (nếu có).
+2. Đưa ra câu viết lại chuẩn và tự nhiên của người bản xứ (kèm Pinyin và nghĩa tiếng Việt).
+3. Giải thích ngắn gọn cấu trúc ngữ pháp liên quan.`
+};
 
-export async function chatWithTutor(message: string, history: { role: string; parts: { text: string }[] }[] = [], level: string = "HSK 2") {
-  try {
-    const ai = getAI();
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: [
-        ...history,
-        { role: "user", parts: [{ text: message }] }
-      ],
-      config: {
-        systemInstruction: `${chineseTutorSystemInstruction}\nTrình độ hiện tại: ${level}.`
-      }
-    });
-
-    return response.text;
-  } catch (error) {
-    console.error("AI Error:", error);
-    return "Xin lỗi, tôi đang gặp chút trục trặc. Bạn hãy thử lại sau nhé!";
-  }
-}
-
-export async function analyzePronunciation(pinyinInput: string) {
-  try {
-    const ai = getAI();
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Phân tích và hướng dẫn phát âm cho pinyin sau: ${pinyinInput}. 
-      Hãy chỉ ra cách đặt lưỡi, khẩu hình miệng và lưu ý về thanh điệu cho người Việt dễ hiểu.`,
-    });
-    return response.text;
-  } catch (error) {
-    return "Không thể phân tích phát âm lúc này.";
-  }
-}
-
-export interface Flashcard {
-  character: string;
-  pinyin: string;
-  translation: string;
-  example: string;
-}
-
-export async function generateFlashcards(topic: string): Promise<Flashcard[]> {
-  try {
-    const ai = getAI();
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Tạo 5 flashcards tiếng Trung về chủ đề: ${topic}. Trả về dưới dạng JSON array.`,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              character: { type: Type.STRING },
-              pinyin: { type: Type.STRING },
-              translation: { type: Type.STRING },
-              example: { type: Type.STRING }
-            },
-            required: ["character", "pinyin", "translation", "example"]
-          }
+export async function sendTutorMessage(
+  apiKey: string,
+  mode: TutorMode,
+  userMessage: string
+): Promise<string> {
+  // Nếu có API key hợp lệ, gọi trực tiếp Gemini qua @google/genai
+  if (apiKey && apiKey.trim().length > 10) {
+    try {
+      const ai = new GoogleGenAI({ apiKey: apiKey.trim() });
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: userMessage,
+        config: {
+          systemInstruction: SYSTEM_PROMPTS[mode],
+          temperature: 0.7
         }
-      }
-    });
+      });
 
-    const text = response.text;
-    if (!text) return [];
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("Flashcard Generation Error:", error);
-    return [];
+      if (response.text) {
+        return response.text;
+      }
+    } catch (err: any) {
+      console.warn("Lỗi gọi Gemini API:", err);
+      return `⚠️ Lỗi kết nối Gemini API: ${err.message || 'Không thể phản hồi'}. Vui lòng kiểm tra lại GEMINI_API_KEY.`;
+    }
   }
+
+  // Chế độ mô phỏng thông minh khi chưa nhập API Key
+  return getDemoResponse(mode, userMessage);
+}
+
+function getDemoResponse(mode: TutorMode, input: string): string {
+  if (mode === 'etymology') {
+    return `### 🔍 Phân tích chiết tự chữ: **${input}**
+- **Bộ thủ:** Biểu thị trường nghĩa gốc của chữ.
+- **Mẹo nhớ:** Chữ này được cấu tạo từ các nét tượng hình đời sống cổ đại.
+- **Từ ghép thông dụng:** 学习 (xuéxí - học tập), 汉字 (hànzì - chữ Hán).
+
+*(💡 Mẹo: Nhập GEMINI_API_KEY ở góc trên để mở khóa tính năng AI phân tích chuyên sâu theo thời gian thực!)*`;
+  }
+
+  if (mode === 'grammar') {
+    return `### 📝 Nhận xét ngữ pháp:
+- Câu của bạn: "${input}"
+- Đánh giá: Cấu trúc cơ bản tốt! Trong tiếng Trung, lưu ý trật tự từ: **Chủ ngữ + Thời gian + Địa điểm + Động từ + Tân ngữ**.
+
+*(💡 Mẹo: Nhập GEMINI_API_KEY để được Gia sư AI Gemini sửa từng chi tiết nhé!)*`;
+  }
+
+  return `你好！很高兴和你聊天。(Nǐ hǎo! Hěn gāoxìng hé nǐ liáotiān - Chào bạn! Rất vui được trò chuyện với bạn).
+
+Học tiếng Hán không quá khó đâu (学汉语不太难). Bạn muốn hỏi về từ vựng, ngữ pháp hay luyện phản xạ nào hôm nay?
+
+*(💡 Mẹo: Nhập GEMINI_API_KEY để trò chuyện tự do không giới hạn với AI Gemini 2.5 Flash!)*`;
 }
