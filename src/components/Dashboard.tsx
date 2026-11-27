@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { CHINESE_DATA, RADICAL_CATEGORIES, Topic, Vocabulary, DialogueLine } from '../data/chineseData';
 import { CHINESE_301_TOPICS } from '../data/chinese301Data';
+import { HSK_TOPICS } from '../data/hskData';
 import { motion, AnimatePresence } from 'motion/react';
 import { BASIC_GRAMMAR_STRUCTURES } from '../data/grammarData';
 import { 
@@ -26,6 +27,34 @@ import { PinyinPronunciationView } from './PinyinPronunciationView';
 import { GrammarPracticeView } from './GrammarPracticeView';
 
 
+const STUDY_GROUPS = [
+  {
+    label: 'Lộ trình',
+    sections: [{ id: 'roadmap', label: 'Lộ trình' }],
+  },
+  {
+    label: 'Thư viện',
+    sections: [
+      { id: 'pinyin', label: 'Phát âm' },
+      { id: 'vocab', label: 'Từ vựng chủ đề' },
+      { id: 'hsk', label: 'Từ vựng HSK' },
+      { id: 'grammar', label: 'Ngữ pháp' },
+      { id: 'radicals', label: 'Bộ thủ' },
+      { id: 'measure-words', label: 'Lượng từ' },
+    ],
+  },
+  {
+    label: 'Luyện tập',
+    sections: [
+      { id: 'practice', label: 'Ôn tập tổng hợp' },
+      { id: 'word-match', label: 'Ghép từ' },
+      { id: 'sentences', label: 'Sắp xếp câu' },
+    ],
+  },
+] as const;
+
+type StudySection = (typeof STUDY_GROUPS)[number]['sections'][number]['id'];
+
 function normalizeText(text: string): string {
   return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -37,7 +66,9 @@ export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState<string | null>(null);
   const [voiceGender, setVoiceGender] = useState<'female'|'male'>('female');
 
-  const [mainTab, setMainTab] = useState<'vocab' | 'roadmap' | 'pinyin' | 'radicals' | 'grammar' | 'practice' | 'sentences' | 'word-match' | 'measure-words'>('roadmap');
+  const [mainTab, setMainTab] = useState<StudySection>('roadmap');
+  const [hskTopic, setHskTopic] = useState(HSK_TOPICS[0]);
+  const activeGroup = STUDY_GROUPS.find(group => group.sections.some(section => section.id === mainTab)) ?? STUDY_GROUPS[0];
   const [practiceMode, setPracticeMode] = useState<'flashcards' | 'quiz' | 'grammar-practice' | null>(null);
   const [flashcardCategory, setFlashcardCategory] = useState<'vocab' | 'radicals' | 'measure-words'>('vocab');
 const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
@@ -66,7 +97,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
       });
       return allRads;
     } else {
-      const topic = [...CHINESE_DATA, ...CHINESE_301_TOPICS].find(t => t.id === selectedWord.topicId);
+      const topic = [...CHINESE_DATA, ...CHINESE_301_TOPICS, ...HSK_TOPICS].find(t => t.id === selectedWord.topicId);
       if (!topic) return [];
 
       if (selectedWord.type === 'radical') {
@@ -307,76 +338,54 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
           exit={{ opacity: 0 }}
           className="max-w-7xl mx-auto py-8 px-4"
         >
-          <div className="mb-12 text-center max-w-3xl mx-auto">
-        <div className="inline-block px-4 py-1.5 bg-orange-100 text-orange-700 rounded-full text-[10px] font-bold mb-4 tracking-widest uppercase shadow-sm">Bắt đầu hành trình</div>
-        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-[0.95]">
-          Làm chủ tiếng Trung <br />
-          <span className="text-orange-500">Dễ như ăn bánh.</span>
-        </h2>
-        <p className="text-gray-500 text-base leading-relaxed mb-8">
-          Học từ phát âm cơ bản, bộ thủ cốt lõi đến cấu trúc thực tế. 
-          Luyện tập phản xạ cùng AI mỗi ngày.
-        </p>
+      <div className="mb-5 text-center sm:mb-6">
+        <h1 className="text-2xl font-black tracking-tight text-gray-900 sm:text-3xl">
+          Học tiếng Trung
+        </h1>
       </div>
 
-      <div className="w-full flex justify-center mb-8 px-4">
-        <div className="flex flex-wrap justify-center gap-2 bg-gray-100 p-2 rounded-[2rem] max-w-2xl">
-          <button 
-            onClick={() => setMainTab('roadmap')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'roadmap' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
+      <nav aria-label="Nhóm nội dung học" className="mx-auto mb-4 grid w-full max-w-md grid-cols-3 gap-1 rounded-2xl bg-gray-100 p-1">
+        {STUDY_GROUPS.map(group => (
+          <button
+            key={group.label}
+            type="button"
+            aria-pressed={activeGroup === group}
+            onClick={() => {
+              if (activeGroup !== group) setMainTab(group.sections[0].id);
+            }}
+            className={cn(
+              "min-h-11 rounded-xl px-1 text-sm font-bold transition-colors sm:px-4",
+              activeGroup === group ? "bg-white text-orange-800 shadow-sm" : "text-gray-600 hover:text-gray-900",
+            )}
           >
-            Lộ trình học
+            {group.label}
           </button>
-          <button 
-            onClick={() => setMainTab('pinyin')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'pinyin' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Phát âm
-          </button>
-          <button 
-            onClick={() => setMainTab('radicals')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'radicals' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Thư viện Bộ Thủ
-          </button>
-          <button 
-            onClick={() => setMainTab('grammar')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'grammar' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Ngữ pháp
-          </button>
-          <button 
-            onClick={() => setMainTab('vocab')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'vocab' ? "bg-white text-orange-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Từ vựng chủ đề
-          </button>
-          <button 
-            onClick={() => setMainTab('word-match')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'word-match' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Ghép từ
-          </button>
-          <button 
-            onClick={() => setMainTab('measure-words')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'measure-words' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Lượng từ
-          </button>
-          <button 
-            onClick={() => setMainTab('sentences')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'sentences' ? "bg-white text-orange-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Sắp xếp câu
-          </button>
-          <button 
-            onClick={() => setMainTab('practice')}
-            className={cn("px-4 md:px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap", mainTab === 'practice' ? "bg-white text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700")}
-          >
-            Ôn tập
-          </button>
-        </div>
-      </div>
+        ))}
+      </nav>
+
+      {activeGroup.sections.length > 1 && (
+        <nav aria-label={activeGroup.label} className="mb-6 flex flex-wrap justify-center gap-2">
+          {activeGroup.sections.map(section => (
+            <button
+              key={section.id}
+              type="button"
+              aria-pressed={mainTab === section.id}
+              onClick={() => {
+                if (section.id === 'practice' && mainTab === 'practice') setPracticeMode(null);
+                setMainTab(section.id);
+              }}
+              className={cn(
+                "min-h-11 rounded-full border px-3 text-sm font-semibold transition-colors sm:px-4",
+                mainTab === section.id
+                  ? "border-orange-300 bg-orange-50 text-orange-900"
+                  : "border-gray-200 bg-white text-gray-700 hover:border-orange-300",
+              )}
+            >
+              {section.label}
+            </button>
+          ))}
+        </nav>
+      )}
 
       {mainTab === 'word-match' && (
         <section className="mb-24">
@@ -421,6 +430,48 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {mainTab === 'hsk' && (
+        <section className="mb-16" aria-labelledby="hsk-heading">
+          <div className="mb-6">
+            <h2 id="hsk-heading" className="text-2xl font-black tracking-tight text-gray-900">Từ vựng HSK</h2>
+            <p className="mt-1 text-sm text-gray-600">Từ vựng chọn lọc theo hệ 6 cấp.</p>
+          </div>
+
+          <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Trình độ HSK">
+            {HSK_TOPICS.map(topic => (
+              <button
+                key={topic.id}
+                type="button"
+                aria-pressed={hskTopic.id === topic.id}
+                onClick={() => setHskTopic(topic)}
+                className={cn(
+                  "min-h-11 rounded-full border px-4 text-sm font-semibold",
+                  hskTopic.id === topic.id ? "border-orange-300 bg-orange-50 text-orange-900" : "border-gray-200 bg-white text-gray-700 hover:border-orange-300",
+                )}
+              >
+                {topic.title}
+              </button>
+            ))}
+          </div>
+
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {hskTopic.vocabulary.map(word => (
+              <li key={word.character}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedWord({ ...word, type: 'vocab', topicId: hskTopic.id, topicTitle: hskTopic.title })}
+                  className="h-full w-full rounded-2xl border border-gray-200 bg-white p-4 text-left hover:border-orange-300"
+                >
+                  <span lang="zh-Hans" className="block text-2xl font-bold text-gray-900">{word.character}</span>
+                  <span className="block font-semibold text-orange-700">{word.pinyin}</span>
+                  <span className="block text-sm text-gray-700">{word.meaning}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
@@ -676,7 +727,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
               <p className="text-sm text-gray-500">Rèn luyện ngữ pháp và tư duy tiếng Trung qua các bài tập HSK</p>
             </div>
           </div>
-          <SentenceOrderingView onBack={() => setMainTab('vocab')} />
+          <SentenceOrderingView onBack={() => { setPracticeMode(null); setMainTab('practice'); }} />
         </section>
       )}
 
@@ -687,7 +738,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
               <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-[24px] flex items-center justify-center mb-6 shadow-inner">
                  <Gamepad2 size={32} />
               </div>
-              <h2 className="text-3xl font-black text-gray-900 mb-2 text-center">Đấu trường Luyện tập</h2>
+              <h2 className="text-3xl font-black text-gray-900 mb-2 text-center">Ôn tập tổng hợp</h2>
               <p className="text-sm text-gray-500 text-center max-w-lg mb-8">
                 Ôn luyện toàn bộ từ vựng đã học qua hệ thống Flashcard kết hợp thuật toán lặp lại ngắt quãng (Spaced Repetition) và các bài Trắc nghiệm ngẫu nhiên.
               </p>
@@ -740,7 +791,7 @@ const [selectedWord, setSelectedWord] = useState<WordItem | null>(null);
                 className="absolute -top-12 left-0 px-4 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2 w-fit transition-colors shadow-sm"
               >
                 <ChevronRight size={14} className="rotate-180" />
-                Quay lại Đấu trường
+                Quay lại ôn tập
               </button>
               
               {practiceMode === 'flashcards' && (
