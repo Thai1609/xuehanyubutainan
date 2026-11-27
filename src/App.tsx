@@ -61,7 +61,7 @@ export default function App() {
                 activeView === 'practice' ? "bg-orange-100 text-orange-700" : "text-gray-500 hover:bg-orange-50"
               )}
             >
-              LUYỆN TẬP AI <Sparkles size={14} className="text-orange-500" />
+              Chat với AI <Sparkles size={14} className="text-orange-500" />
             </button>
           </div>
 
@@ -100,7 +100,7 @@ export default function App() {
                   activeView === 'practice' ? "bg-orange-50 text-orange-700" : "text-gray-800 hover:bg-gray-50"
                 )}
               >
-                <MessageSquare size={28} /> LUYỆN TẬP AI
+                <MessageSquare size={28} /> Chat với AI
               </button>
             </div>
           </motion.div>
@@ -130,7 +130,7 @@ export default function App() {
             >
               <div className="mb-12 text-center">
                 <div className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-bold mb-4 uppercase tracking-widest">Giao tiếp thông minh</div>
-                <h1 className="text-4xl font-bold text-gray-800 mb-2">Luyện tập cùng Xiao Ai</h1>
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">Chat với AI</h1>
                 <p className="text-gray-500 max-w-xl mx-auto">Nói chuyện, sửa lỗi ngữ pháp và học cách phát âm pinyin chuẩn xác với giáo viên AI của riêng bạn.</p>
               </div>
               <AIAssistant />
